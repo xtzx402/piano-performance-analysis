@@ -105,7 +105,8 @@ python ultimate_pipeline.py
 ## Visualizations
 
 ### 1. 9-Dimensional Expressive Style Radar Charts
-**File**: `results_expressive_style/plots/09_expressive_style_radar.png`
+
+![Expressive Style Radar Charts](results_expressive_style/plots/09_expressive_style_radar.png)
 
 Three polar/radar charts showing the normalized (0-1) profile of each pianist across 9 expressive dimensions:
 - **Lang Lang**: Balanced artist with moderate flexibility, soft attack, deep vibrato
@@ -115,7 +116,8 @@ Three polar/radar charts showing the normalized (0-1) profile of each pianist ac
 Each dimension is normalized to 0-1 scale for fair comparison across different measurement units.
 
 ### 2. Dimensions Comparison Grid
-**File**: `results_expressive_style/plots/10_dimensions_comparison.png`
+
+![Dimensions Comparison Grid](results_expressive_style/plots/10_dimensions_comparison.png)
 
 3×3 grid of bar charts comparing all three pianists across nine dimensions:
 1. **Tempo (BPM)** - Playback speed
@@ -131,57 +133,120 @@ Each dimension is normalized to 0-1 scale for fair comparison across different m
 Plus additional metrics: Tone Richness, Attack Sharpness, Sustain Length, Rubato Coefficient, Agogic Accent Frequency
 
 ### 3. Ultimate Analysis Visualizations
-**Files**: `results_ultimate/plots/`
 
-- **05_temporal_evolution.png**: Time-series RMS energy curves showing how each pianist's dynamics evolve throughout the performance
-  - Lang Lang: Mid-performance peak
-  - Li Yundi: Continuous decay
-  - Shen Wenyu: Stable energy throughout
+#### Temporal Evolution
 
-- **06_clustering_visualization.png**: K-means clustering results (k=3)
-  - Shows how temporal frames naturally cluster
-  - Shen Wenyu occupies distinct Cluster 1 (54.5%)
-  - Lang Lang and Li Yundi overlap in Clusters 0 & 2
-  - Demonstrates acoustic distinctiveness of each pianist
+![Temporal Evolution](results_ultimate/plots/05_temporal_evolution.png)
 
-- **07_effect_size_heatmap.png**: Heatmap of eta-squared effect sizes (η²) for all 13 MFCC dimensions
-  - Darker colors = larger effects
-  - MFCC2 shows maximum effect size (η² = 0.4763)
-  - All dimensions show significant differences (p < 0.001)
+Time-series RMS energy curves showing how each pianist's dynamics evolve throughout the performance:
+- Lang Lang: Mid-performance peak
+- Li Yundi: Continuous decay
+- Shen Wenyu: Stable energy throughout
 
-- **08_hierarchical_dendrogram.png**: Hierarchical clustering dendrogram
-  - Shows which MFCCs cluster together
-  - Demonstrates structural relationships between features
+#### Clustering Visualization
+
+![Clustering Visualization](results_ultimate/plots/06_clustering_visualization.png)
+
+K-means clustering results (k=3):
+- Shows how temporal frames naturally cluster
+- Shen Wenyu occupies distinct Cluster 1 (54.5%)
+- Lang Lang and Li Yundi overlap in Clusters 0 & 2
+- Demonstrates acoustic distinctiveness of each pianist
+
+#### Effect Size Heatmap
+
+![Effect Size Heatmap](results_ultimate/plots/07_effect_size_heatmap.png)
+
+Heatmap of eta-squared effect sizes (η²) for all 13 MFCC dimensions:
+- Darker colors = larger effects
+- MFCC2 shows maximum effect size (η² = 0.4763)
+- All dimensions show significant differences (p < 0.001)
+
+#### Hierarchical Dendrogram
+
+![Hierarchical Dendrogram](results_ultimate/plots/08_hierarchical_dendrogram.png)
+
+Hierarchical clustering dendrogram:
+- Shows which MFCCs cluster together
+- Demonstrates structural relationships between features
 
 ### 4. Enhanced Analysis Visualizations
-**Files**: `results_enhanced/plots/`
 
-- **01_kfold_cv.png**: 5-fold cross-validation performance
-  - Training accuracy: 99.96%
-  - Test accuracy: 0% (expected - each pianist has unique signature)
-  - Shows model doesn't overfit but captures highly distinct acoustic signatures
+#### K-Fold Cross-Validation
 
-- **02_anova_significance.png**: Statistical significance of all extracted features
-  - Bar chart of p-values for each feature
-  - All features show p < 0.05
+![K-Fold CV Performance](results_enhanced/plots/01_kfold_cv.png)
 
-- **03_train_vs_test.png**: Training vs. test set performance comparison
+5-fold cross-validation performance:
+- Training accuracy: 99.96%
+- Test accuracy: 0% (expected - each pianist has unique signature)
+- Shows model doesn't overfit but captures highly distinct acoustic signatures
 
-- **04_feature_heatmap.png**: Normalized feature values heatmap
-  - Rows: Features
-  - Columns: Performers
-  - Shows which features differ most between pianists
+#### ANOVA Significance
+
+![ANOVA Significance](results_enhanced/plots/02_anova_significance.png)
+
+Statistical significance of all extracted features:
+- Bar chart of p-values for each feature
+- All features show p < 0.05
+
+#### Train vs Test Performance
+
+![Train vs Test](results_enhanced/plots/03_train_vs_test.png)
+
+Training vs. test set performance comparison
+
+#### Feature Heatmap
+
+![Feature Heatmap](results_enhanced/plots/04_feature_heatmap.png)
+
+Normalized feature values heatmap:
+- Rows: Features
+- Columns: Performers
+- Shows which features differ most between pianists
 
 ### 5. Initial Analysis Visualizations
-**Files**: `results/plots/`
 
-- **01_mfcc_comparison.png**: MFCC coefficient comparison across pianists
-- **02_rms_envelope.png**: RMS energy envelopes
-- **03_mfcc_spectrogram.png**: Time-frequency spectrograms
-- **04_style_heatmap.png**: Overall style similarity heatmap
-- **05_confusion_matrix.png**: SVM classifier confusion matrix
-- **06_dtw_distances.png**: Dynamic Time Warping distance matrix
-- **07_chroma_analysis.png**: Chromatic feature analysis
+#### MFCC Comparison
+
+![MFCC Comparison](results/plots/01_mfcc_comparison.png)
+
+MFCC coefficient comparison across pianists
+
+#### RMS Energy Envelope
+
+![RMS Envelope](results/plots/02_rms_envelope.png)
+
+RMS energy envelopes over time
+
+#### MFCC Spectrogram
+
+![MFCC Spectrogram](results/plots/03_mfcc_spectrogram.png)
+
+Time-frequency spectrograms showing MFCC evolution
+
+#### Style Similarity Heatmap
+
+![Style Heatmap](results/plots/04_style_heatmap.png)
+
+Overall style similarity heatmap between performers
+
+#### SVM Confusion Matrix
+
+![Confusion Matrix](results/plots/05_confusion_matrix.png)
+
+SVM classifier confusion matrix (99.91% accuracy)
+
+#### DTW Distance Matrix
+
+![DTW Distances](results/plots/06_dtw_distances.png)
+
+Dynamic Time Warping distance matrix showing performer similarity
+
+#### Chromatic Analysis
+
+![Chroma Analysis](results/plots/07_chroma_analysis.png)
+
+Chromatic feature analysis across all pianists
 
 ## Results Summary
 
