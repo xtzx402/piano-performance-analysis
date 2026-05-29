@@ -108,7 +108,7 @@ Sound project/
     ├── confusion_matrix.csv
     └── analysis_report.txt
 
-DATA FILES (⭐ NEW - Standard Comparison)
+DATA FILES
 ├── caiyun_reference_standard.mid        # Standard MIDI reference
 ├── performance_vs_standard.csv          # Performer comparison metrics
 └── performance_interpretation_analysis.csv
@@ -200,7 +200,7 @@ python music_analysis_pipeline.py
 
 ## Visualizations
 
-### 🎵 Standard Sheet Music Comparison (NEW!)
+### 🎵 Standard Sheet Music Comparison
 
 #### Pianist Performance vs Official Score
 
@@ -213,7 +213,7 @@ This analysis compares each pianist's performance against the official sheet mus
 - Key: B Major (五个升号 / 5 sharps)
 - Time: 4/4 (四四拍)
 - Dynamics: p → mf → ff → pp
-- Arrangement: 王港中 (Wang Jianzong, 1975)
+- Arrangement: 王建中 (Wang Jianzong, 1975)
 
 **Key Findings:**
 
