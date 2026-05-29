@@ -14,10 +14,11 @@ Through multi-dimensional audio feature analysis using standard MIR techniques.
 ## Key Features
 
 - **9-Dimensional Expressive Analysis**: Timing, Dynamics, Articulation, Vibrato, Tone Color, Attack, Sustain, Rubato, and Agogic Accents
+- **Standard Sheet Music Comparison**: Performance analysis against the official score (Moderato Chiaramente, 90 BPM, B Major)
 - **Advanced Statistical Analysis**: ANOVA, Tukey HSD post-hoc tests, effect size calculations (Cohen's d, eta-squared)
 - **Machine Learning**: SVM classification, K-means clustering with 99%+ accuracy
 - **Temporal Analysis**: 2-second windowed feature extraction and style consistency metrics
-- **Comprehensive Visualizations**: Radar charts, clustering dendrograms, temporal curves, dimension comparisons
+- **Comprehensive Visualizations**: Radar charts, clustering dendrograms, temporal curves, dimension comparisons, standard comparison charts
 
 ## Project Structure
 
@@ -25,20 +26,67 @@ Through multi-dimensional audio feature analysis using standard MIR techniques.
 Sound project/
 ├── README.md
 ├── .gitignore
-├── ultimate_pipeline.py           # Comprehensive statistical analysis
-├── enhanced_pipeline.py           # Extended feature extraction (15+ dimensions)
-├── expressive_style_pipeline.py   # 9-dimensional expressive style analysis
-├── music_analysis_pipeline.py     # Initial analysis pipeline
-├── convert_audio.py               # Audio format conversion utility
-├── verify_audio.py                # Audio verification utility
-├── results_ultimate/              # Ultimate analysis results
-├── results_enhanced/              # Enhanced feature analysis results
-└── results_expressive_style/      # Expressive style analysis results
+├── 62a57402e5a6c.pdf                    # Official sheet music (王港中 1975 arrangement)
+│
+├── ANALYSIS PIPELINES
+├── ultimate_pipeline.py                 # Comprehensive statistical analysis
+├── enhanced_pipeline.py                 # Extended feature extraction (15+ dimensions)
+├── expressive_style_pipeline.py         # 9-dimensional expressive style analysis
+├── music_analysis_pipeline.py           # Initial analysis pipeline
+├── create_reference_midi.py             # Generate standard reference MIDI
+├── comparative_analysis_vs_standard.py  # Compare pianists vs sheet music
+├── temporal_evolution_vs_standard.py    # Temporal evolution comparison
+│
+├── UTILITIES
+├── convert_audio.py                     # Audio format conversion utility
+├── verify_audio.py                      # Audio verification utility
+│
+├── RESULTS DIRECTORIES
+├── results_ultimate/                    # Ultimate analysis results
+│   ├── plots/
+│   │   ├── 05_temporal_evolution.png
+│   │   ├── 06_clustering_visualization.png
+│   │   ├── 07_effect_size_heatmap.png
+│   │   ├── 08_hierarchical_dendrogram.png
+│   │   └── 11_temporal_vs_standard.png  # ⭐ NEW: Standard comparison
+│   ├── tukey_posthoc_results.csv
+│   ├── temporal_analysis.csv
+│   ├── style_consistency.csv
+│   └── ULTIMATE_ANALYSIS_REPORT.txt
+│
+├── results_enhanced/                    # Enhanced feature analysis
+│   ├── plots/
+│   │   ├── 01_kfold_cv.png
+│   │   ├── 02_anova_significance.png
+│   │   ├── 03_train_vs_test.png
+│   │   └── 04_feature_heatmap.png
+│   └── feature_statistics.csv
+│
+├── results_expressive_style/            # 9-dimensional expressive style
+│   ├── plots/
+│   │   ├── 09_expressive_style_radar.png
+│   │   └── 10_dimensions_comparison.png
+│   ├── expressive_style_9dimensions.csv
+│   └── EXPRESSIVE_STYLE_REPORT.txt
+│
+└── results/                             # Initial analysis
     ├── plots/
-    │   ├── 09_expressive_style_radar.png
-    │   └── 10_dimensions_comparison.png
-    ├── expressive_style_9dimensions.csv
-    └── EXPRESSIVE_STYLE_REPORT.txt
+    │   ├── 01_mfcc_comparison.png
+    │   ├── 02_rms_envelope.png
+    │   ├── 03_mfcc_spectrogram.png
+    │   ├── 04_style_heatmap.png
+    │   ├── 05_confusion_matrix.png
+    │   ├── 06_dtw_distances.png
+    │   └── 07_chroma_analysis.png
+    ├── style_differences.csv
+    ├── classification_accuracy.csv
+    ├── confusion_matrix.csv
+    └── analysis_report.txt
+
+DATA FILES (⭐ NEW - Standard Comparison)
+├── caiyun_reference_standard.mid        # Standard MIDI reference
+├── performance_vs_standard.csv          # Performer comparison metrics
+└── performance_interpretation_analysis.csv
 ```
 
 ## Quick Start
@@ -103,6 +151,34 @@ python ultimate_pipeline.py
 - Generalization test: Two additional pianists as independent test set
 
 ## Visualizations
+
+### 🎵 Standard Sheet Music Comparison (NEW!)
+
+#### Pianist Performance vs Official Score
+
+![Temporal vs Standard](results_ultimate/plots/11_temporal_vs_standard.png)
+
+This analysis compares each pianist's performance against the official sheet music interpretation:
+
+**Standard Parameters (from score):**
+- Speed: Moderato Chiaramente ≈ 90 BPM
+- Key: B Major (五个升号 / 5 sharps)
+- Time: 4/4 (四四拍)
+- Dynamics: p → mf → ff → pp
+- Arrangement: 王港中 (Wang Jianzong, 1975)
+
+**Key Findings:**
+
+| Dimension | Lang Lang | Li Yundi | Shen Wenyu |
+|-----------|-----------|----------|-----------|
+| **Force / Strength** | -1.8% | -19.4% | **+21.2%** ⭐ |
+| **Tone Brightness** | -110 Hz | -144 Hz | **+254 Hz** ⭐ |
+| **Rhythmic Freedom** | High (CV=0.40) | **Very High (CV=0.80)** ⭐ | Moderate (CV=0.20) |
+
+**Interpretation:**
+- **Lang Lang**: Faithful to the score, gentle interpretation
+- **Li Yundi**: Most artistic rhythmic freedom, softest dynamics
+- **Shen Wenyu**: Most powerful and bright, strict timing control
 
 ### 1. 9-Dimensional Expressive Style Radar Charts
 
@@ -262,9 +338,16 @@ Style consistency is high across performance sections for all pianists (r > 0.97
 
 ## Output Files
 
+### Analysis Pipelines
 - `ultimate_pipeline.py` generates: Statistical analysis, clustering visualizations, temporal curves, comprehensive text report
 - `enhanced_pipeline.py` generates: Feature statistics, SVM classifier performance metrics
 - `expressive_style_pipeline.py` generates: 9-dimensional metrics, radar charts, dimension comparison grid, narrative report
+- `music_analysis_pipeline.py` generates: MFCC comparison, RMS envelopes, spectrograms, style heatmaps
+
+### Standard Comparison (NEW!)
+- `create_reference_midi.py` generates: Standard reference MIDI file (caiyun_reference_standard.mid)
+- `comparative_analysis_vs_standard.py` generates: Performer vs standard comparison metrics (performance_vs_standard.csv)
+- `temporal_evolution_vs_standard.py` generates: Temporal evolution comparison visualization (11_temporal_vs_standard.png)
 
 ```
 
