@@ -35,7 +35,7 @@ print("\n" + "="*90)
 print("ULTIMATE PIANO PERFORMANCE ANALYSIS PIPELINE".center(90))
 print("="*90)
 
-base_path = Path(r"C:\Users\wenli\OneDrive\Desktop\Sound project")
+base_path = Path(__file__).parent
 results_path = base_path / "results_ultimate"
 results_path.mkdir(exist_ok=True)
 plots_path = results_path / "plots"
@@ -128,8 +128,11 @@ y_train = np.array(y_train_list)
 
 print("\n[ANOVA Results]")
 print("  H0: All performers have identical MFCC distributions")
-print("\n  MFCC | F-stat   | p-value  | Eta-sq (Effect Size)")
-print("  " + "-"*60)
+n_anova_tests = 13
+bonferroni_alpha = 0.05 / n_anova_tests  # Bonferroni-corrected threshold
+print(f"  Multiple-testing correction: Bonferroni alpha = 0.05 / {n_anova_tests} = {bonferroni_alpha:.4f}")
+print(f"\n  MFCC | F-stat   | p-value  | Eta-sq (Effect Size) | Bonf.")
+print("  " + "-"*65)
 
 anova_results = []
 for mfcc_idx in range(13):
@@ -143,18 +146,21 @@ for mfcc_idx in range(13):
     eta_sq = ss_between / (ss_total + 1e-10)
 
     sig = "***" if p_value < 0.001 else "**" if p_value < 0.01 else "*" if p_value < 0.05 else "ns"
-    print(f"  {mfcc_idx:2d}   | {f_stat:8.2f} | {p_value:.2e} | {eta_sq:.4f} {sig}")
+    bonf_sig = "[Bonf*]" if p_value < bonferroni_alpha else ""
+    print(f"  {mfcc_idx:2d}   | {f_stat:8.2f} | {p_value:.2e} | {eta_sq:.4f} {sig:<5} | {bonf_sig}")
 
     anova_results.append({
         'MFCC': mfcc_idx,
         'F': f_stat,
         'p_value': p_value,
         'eta_sq': eta_sq,
-        'Sig': p_value < 0.05
+        'Sig': p_value < 0.05,
+        'Sig_Bonferroni': p_value < bonferroni_alpha
     })
 
 sig_count = sum(1 for r in anova_results if r['Sig'])
-print(f"\n  CONCLUSION: {sig_count}/13 MFCC coefficients significantly different (p < 0.05)")
+sig_bonf_count = sum(1 for r in anova_results if r['Sig_Bonferroni'])
+print(f"\n  CONCLUSION: {sig_count}/13 significant (p < 0.05); {sig_bonf_count}/13 survive Bonferroni correction")
 
 print("\n[Tukey HSD Post-hoc Test]")
 from scipy.stats import ttest_ind
@@ -356,11 +362,13 @@ plt.close()
 print("OK")
 
 # ============================================================================
-print("\n[STEP 6] STYLE CONSISTENCY SIMULATION".center(90))
+print("\n[STEP 6] TEMPORAL SELF-CONSISTENCY ANALYSIS".center(90))
 print("="*90)
 
-print("\nSimulating cross-piece consistency analysis...")
-print("  (Using different temporal sections as 'different pieces')")
+print("\nAnalyzing expressive self-consistency across temporal sections...")
+print("  NOTE: Only one piece is available per performer. This measures how uniformly")
+print("  each performer sustains their expressive style across early/middle/late sections")
+print("  of the SAME recording — NOT cross-piece generalization.")
 
 # Divide each performance into 3 "pieces"
 consistency_results = []
@@ -396,7 +404,7 @@ for performer in train_performers:
     })
 
 consistency_df = pd.DataFrame(consistency_results)
-print("\n  Cross-piece Style Consistency:")
+print("\n  Temporal Self-Consistency (same piece, different thirds):")
 print("  " + "-"*60)
 for _, row in consistency_df.iterrows():
     print(f"  {row['Performer']:<10}: Correlation = {row['Cross_piece_correlation']:.4f} ± {row['Std']:.4f}")

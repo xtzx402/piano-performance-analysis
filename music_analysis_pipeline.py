@@ -28,7 +28,7 @@ print("第一部分：特征提取".center(70))
 print("="*70)
 
 # 定义文件路径
-base_path = Path(r"C:\Users\wenli\OneDrive\Desktop\Sound project")
+base_path = Path(__file__).parent
 results_path = base_path / "results"
 results_path.mkdir(exist_ok=True)
 
@@ -142,18 +142,21 @@ mfcc_langlang = features_data["郎朗"]['mfcc'].T
 mfcc_liyundi = features_data["李云迪"]['mfcc'].T
 mfcc_shenwenyu = features_data["沈文裕"]['mfcc'].T
 
-# 计算DTW距离和路径
+# 计算DTW距离和路径 (normalized by path length for fair cross-length comparison)
 print("  计算郎朗 vs 李云迪...", end=" ")
 distance_ll_ly, path_ll_ly = fastdtw(mfcc_langlang, mfcc_liyundi, dist=euclidean)
-print(f"✓ (距离: {distance_ll_ly:.2f})")
+distance_ll_ly = distance_ll_ly / len(path_ll_ly)   # normalize by path length
+print(f"✓ (标准化距离: {distance_ll_ly:.4f})")
 
 print("  计算郎朗 vs 沈文裕...", end=" ")
 distance_ll_sw, path_ll_sw = fastdtw(mfcc_langlang, mfcc_shenwenyu, dist=euclidean)
-print(f"✓ (距离: {distance_ll_sw:.2f})")
+distance_ll_sw = distance_ll_sw / len(path_ll_sw)
+print(f"✓ (标准化距离: {distance_ll_sw:.4f})")
 
 print("  计算李云迪 vs 沈文裕...", end=" ")
 distance_ly_sw, path_ly_sw = fastdtw(mfcc_liyundi, mfcc_shenwenyu, dist=euclidean)
-print(f"✓ (距离: {distance_ly_sw:.2f})")
+distance_ly_sw = distance_ly_sw / len(path_ly_sw)
+print(f"✓ (标准化距离: {distance_ly_sw:.4f})")
 
 # 存储DTW结果
 dtw_results = {

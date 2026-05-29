@@ -30,7 +30,7 @@ print("\n" + "="*80)
 print("ENHANCED PIANO PERFORMANCE ANALYSIS".center(80))
 print("="*80)
 
-base_path = Path(r"C:\Users\wenli\OneDrive\Desktop\Sound project")
+base_path = Path(__file__).parent
 results_path = base_path / "results_enhanced"
 results_path.mkdir(exist_ok=True)
 
@@ -103,10 +103,14 @@ def extract_enhanced_features(y, sr):
     zcr = librosa.feature.zero_crossing_rate(y=y, hop_length=hop_length)[0]
     features['zcr_mean'] = np.mean(zcr)
 
-    # 7. Attack Time
-    energy = np.abs(y)
-    peak_idx = np.argmax(energy[:sr])
-    features['attack_time'] = peak_idx / sr if peak_idx > 0 else 0.1
+    # 7. Attack Time — time of first detected musical onset
+    onset_env_attack = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop_length)
+    onset_frames_attack = librosa.util.peak_pick(onset_env_attack, pre_max=3, post_max=3,
+                                                  pre_avg=3, post_avg=3, delta=0.1, wait=10)
+    if len(onset_frames_attack) > 0:
+        features['attack_time'] = librosa.frames_to_time(onset_frames_attack[0], sr=sr, hop_length=hop_length)
+    else:
+        features['attack_time'] = 0.0
 
     return features
 
@@ -250,6 +254,32 @@ if X_test_list:
     print(f"  Generalization: Model can identify UNKNOWN performers with {test_acc:.1%} accuracy!")
 
 # ============================================================================
+print("\n[STEP 5b] PERMUTATION FEATURE IMPORTANCE".center(80))
+print("="*80)
+
+print("\nEstimating which MFCC coefficients drive SVM performance (permutation importance)...")
+print("  (Permutes each feature and measures accuracy drop — model-agnostic)")
+
+from sklearn.inspection import permutation_importance
+
+pi = permutation_importance(final_svm, X_train_scaled, y_train,
+                            n_repeats=10, random_state=42, scoring='accuracy')
+
+mfcc_importances = pi.importances_mean
+mfcc_importance_std = pi.importances_std
+
+print(f"\n  {'MFCC':<8} {'Importance':<14} {'Std':<10} {'Rank'}")
+print("  " + "-"*45)
+ranked = np.argsort(mfcc_importances)[::-1]
+for rank, idx in enumerate(ranked, 1):
+    bar = "█" * max(0, int(mfcc_importances[idx] * 200))
+    print(f"  MFCC {idx:2d}  {mfcc_importances[idx]:+.4f}       ±{mfcc_importance_std[idx]:.4f}   #{rank}  {bar}")
+
+top3 = ranked[:3]
+print(f"\n  Top-3 most discriminative: MFCC {top3[0]}, MFCC {top3[1]}, MFCC {top3[2]}")
+print(f"  (These capture timbral shape differences most tied to performer identity)")
+
+# ============================================================================
 print("\n[STEP 6] HIGH-DIMENSIONAL FEATURE STATISTICS".center(80))
 print("="*80)
 
@@ -362,7 +392,8 @@ print("\n【KEY FINDING 2】 Model Generalization")
 if X_test_list:
     print(f"  • Train accuracy: {train_acc:.2%} (known performers)")
     print(f"  • Test accuracy:  {test_acc:.2%} (UNKNOWN performers)")
-    print(f"  • Conclusion: Model generalizes well - can identify even NEW pianists!")
+    print(f"  • Conclusion: Model distinguishes all 5 pianists in this dataset;")
+    print(f"    generalisation to entirely unseen performers requires evaluation beyond these 5.")
 else:
     print(f"  • Test set not available")
 

@@ -28,7 +28,7 @@ print("EXPRESSIVE PERFORMANCE STYLE ANALYSIS".center(90))
 print("分析演奏家的表现性风格特征维度".center(90))
 print("="*90)
 
-base_path = Path(r"C:\Users\wenli\OneDrive\Desktop\Sound project")
+base_path = Path(__file__).parent
 results_path = base_path / "results_expressive_style"
 results_path.mkdir(exist_ok=True)
 plots_path = results_path / "plots"
@@ -126,26 +126,39 @@ def analyze_articulation(y, sr):
     }
 
 def analyze_vibrato(y, sr):
-    """分析Vibrato（颤音）特征"""
+    """Analyze vibrato as amplitude modulation (correct for piano — piano has no pitch vibrato)"""
     hop_length = 512
 
-    # 计算Instantaneous Frequency variation - 颤音会导致频率波动
-    D = librosa.stft(y, hop_length=hop_length)
-    magnitude = np.abs(D)
-    phase = np.angle(D)
+    # Piano vibrato manifests as amplitude modulation, not pitch/frequency variation.
+    # Use RMS envelope and detect periodic fluctuations via autocorrelation.
+    rms = librosa.feature.rms(y=y, hop_length=hop_length)[0]
 
-    # 简化分析：计算频谱重心随时间的变化
-    centroid = librosa.feature.spectral_centroid(S=magnitude)[0]
-    centroid_diff = np.diff(centroid)
+    rms_norm = (rms - np.mean(rms)) / (np.std(rms) + 1e-10)
+    autocorr = np.correlate(rms_norm, rms_norm, mode='full')
+    autocorr = autocorr[len(autocorr) // 2:]
+    autocorr = autocorr / (autocorr[0] + 1e-10)
 
-    vibrato_rate = np.std(centroid_diff) / (np.mean(np.abs(centroid_diff)) + 1e-10)
-    vibrato_depth = np.std(centroid_diff)  # Hz
+    # Look for periodicity in 3–8 Hz range (typical vibrato rate)
+    frame_rate = sr / hop_length
+    min_lag = max(1, int(frame_rate / 8))   # 8 Hz upper bound
+    max_lag = int(frame_rate / 3)            # 3 Hz lower bound
+
+    if max_lag > min_lag and max_lag < len(autocorr):
+        peak_lag = np.argmax(autocorr[min_lag:max_lag]) + min_lag
+        vibrato_rate = frame_rate / peak_lag          # Hz
+        vibrato_depth = float(autocorr[peak_lag])     # Correlation strength (0–1)
+    else:
+        vibrato_rate = 0.0
+        vibrato_depth = 0.0
+
+    # Overall dynamic modulation (coefficient of variation of RMS)
+    rms_variation = np.std(rms) / (np.mean(rms) + 1e-10)
 
     return {
-        'spectral_centroid': centroid,
-        'vibrato_depth': vibrato_depth,  # Hz
-        'vibrato_rate': vibrato_rate,
-        'vibrato_prevalence': np.mean(np.abs(centroid_diff)) / (np.std(centroid) + 1e-10)
+        'rms_envelope': rms,
+        'vibrato_depth': vibrato_depth,      # Amplitude modulation depth (0–1)
+        'vibrato_rate': vibrato_rate,         # Estimated periodicity (Hz)
+        'vibrato_prevalence': rms_variation   # Overall dynamic modulation (CV)
     }
 
 def analyze_tone_color(y, sr):
@@ -293,8 +306,11 @@ def analyze_agogic_accent(y, sr):
         ioi = np.diff(onset_times)
         ioi_ratio = ioi / np.mean(ioi)
 
-        # Agogic accents 是延长的音符（IOI > average）
-        accents = np.where(ioi_ratio > 1.1)[0]  # >110% 为accent
+        # Agogic accents: IOI significantly above local spread (IQR-based, not fixed 110%)
+        q75 = np.percentile(ioi_ratio, 75)
+        q25 = np.percentile(ioi_ratio, 25)
+        accent_threshold = q75 + 0.5 * (q75 - q25)  # Q3 + 0.5*IQR
+        accents = np.where(ioi_ratio > accent_threshold)[0]
         accent_frequency = len(accents) / len(ioi) if len(ioi) > 0 else 0
         accent_magnitude = np.mean(ioi_ratio[accents]) if len(accents) > 0 else 1
     else:
