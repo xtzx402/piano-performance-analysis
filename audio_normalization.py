@@ -102,12 +102,13 @@ for filename, performer_name in performers_data.items():
         scale_factor = TARGET_RMS / trimmed_rms
         y_normalized = y_trimmed * scale_factor
 
-        # Prevent clipping
+        # Soft limiting to prevent clipping (avoid hard clipping artifacts)
         max_val = np.max(np.abs(y_normalized))
         if max_val > 1.0:
-            y_normalized = y_normalized / max_val
+            # Use soft clipping with tanh function for smoother limiting
+            y_normalized = np.tanh(y_normalized / max_val) * 0.99
             scale_factor = scale_factor / max_val
-            print(f"  ⚠ 进行了削波防止 / Clipping prevention applied")
+            print(f"  ⚠ 应用软限制 / Soft limiting applied (tanh-based)")
     else:
         y_normalized = y_trimmed
         scale_factor = 1.0

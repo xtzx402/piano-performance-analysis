@@ -606,7 +606,7 @@ for idx, dimension in enumerate(dimensions):
     ax = axes[idx]
 
     data = style_df[['Performer', dimension]].copy()
-    colors = ['#FF6B6B', '#4ECDC4', '#45B7D1']
+    colors = ['#E74C3C', '#F39C12', '#3498DB']  # Red, Yellow, Blue - high contrast
 
     bars = ax.bar(data['Performer'], data[dimension], color=colors, alpha=0.8, edgecolor='black', linewidth=1.5)
 

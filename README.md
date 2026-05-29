@@ -20,7 +20,7 @@ Through multi-dimensional audio feature analysis using standard MIR techniques.
 - **Temporal Analysis**: 2-second windowed feature extraction and style consistency metrics
 - **Comprehensive Visualizations**: Radar charts, clustering dendrograms, temporal curves, dimension comparisons, standard comparison charts
 
-## Audio Normalization ⭐ NEW
+## Audio Normalization
 
 To ensure fair comparison, all audio files are normalized to:
 - **Sample Rate**: 22,050 Hz (uniform resampling)
@@ -46,9 +46,9 @@ Sound project/
 ├── 62a57402e5a6c.pdf                    # Official sheet music (王港中 1975 arrangement)
 │
 ├── AUDIO NORMALIZATION
-├── audio_normalization.py                # ⭐ NEW: Normalize audio files
-├── comparative_analysis_normalized.py    # ⭐ NEW: Fair comparison of normalized audio
-├── normalized_audio/                     # ⭐ NEW: Standardized audio files
+├── audio_normalization.py                # Normalize audio files
+├── comparative_analysis_normalized.py    # Fair comparison of normalized audio
+├── normalized_audio/                     # Standardized audio files
 │   ├── normalized_langlang_caiyun.wav
 │   ├── normalized_liyundi_caiyun.wav
 │   └── normalized_shenwenyu_caiyun.wav
@@ -73,7 +73,7 @@ Sound project/
 │   │   ├── 06_clustering_visualization.png
 │   │   ├── 07_effect_size_heatmap.png
 │   │   ├── 08_hierarchical_dendrogram.png
-│   │   └── 11_temporal_vs_standard.png  # ⭐ NEW: Standard comparison
+│   │   └── 11_temporal_vs_standard.png  # Standard comparison
 │   ├── tukey_posthoc_results.csv
 │   ├── temporal_analysis.csv
 │   ├── style_consistency.csv
@@ -392,7 +392,7 @@ Style consistency is high across performance sections for all pianists (r > 0.97
 - `expressive_style_pipeline.py` generates: 9-dimensional metrics, radar charts, dimension comparison grid, narrative report
 - `music_analysis_pipeline.py` generates: MFCC comparison, RMS envelopes, spectrograms, style heatmaps
 
-### Standard Comparison (NEW!)
+### Standard Comparison
 - `create_reference_midi.py` generates: Standard reference MIDI file (caiyun_reference_standard.mid)
 - `comparative_analysis_vs_standard.py` generates: Performer vs standard comparison metrics (performance_vs_standard.csv)
 - `temporal_evolution_vs_standard.py` generates: Temporal evolution comparison visualization (11_temporal_vs_standard.png)

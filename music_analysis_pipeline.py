@@ -400,7 +400,7 @@ print("\n4. DTW距离对比...")
 fig, ax = plt.subplots(figsize=(8, 6))
 dtw_names = ['郎朗 vs\n李云迪', '郎朗 vs\n沈文裕', '李云迪 vs\n沈文裕']
 dtw_distances = [distance_ll_ly, distance_ll_sw, distance_ly_sw]
-colors = ['#FF6B6B', '#4ECDC4', '#45B7D1']
+colors = ['#E74C3C', '#F39C12', '#3498DB']  # Red, Yellow, Blue - high contrast
 bars = ax.bar(dtw_names, dtw_distances, color=colors, alpha=0.8, edgecolor='black', linewidth=1.5)
 ax.set_ylabel('DTW距离 / DTW Distance')
 ax.set_title('演奏风格相似度（DTW距离）/ Performance Style Similarity (DTW Distance)\n距离越小越相似 / Smaller distance = More similar')

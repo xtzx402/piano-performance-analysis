@@ -32,7 +32,7 @@ performers_data = {
     "shenwenyu_caiyun.wav": "沈文裕 (Shen Wenyu)"
 }
 
-colors = ['#FF6B6B', '#4ECDC4', '#45B7D1']
+colors = ['#E74C3C', '#F39C12', '#3498DB']  # Red, Yellow, Blue - high contrast
 
 # Create figure with multiple subplots
 fig, axes = plt.subplots(2, 2, figsize=(16, 12))

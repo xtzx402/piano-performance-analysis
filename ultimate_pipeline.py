@@ -315,7 +315,7 @@ ax.grid(True, alpha=0.3)
 
 # Performer-colored scatter
 ax = axes[1]
-colors = {'郎朗 (Lang Lang)': 'red', '李云迪 (Li Yundi)': 'blue', '沈文裕 (Shen Wenyu)': 'green'}
+colors = {'郎朗 (Lang Lang)': '#E74C3C', '李云迪 (Li Yundi)': '#F39C12', '沈文裕 (Shen Wenyu)': '#3498DB'}  # Red, Yellow, Blue - high contrast
 for performer in train_performers:
     mask = y_train == performer
     ax.scatter(X_pca[mask, 0], X_pca[mask, 1], alpha=0.5, s=30, label=performer, color=colors[performer])
