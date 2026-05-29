@@ -372,9 +372,34 @@ Dynamic Time Warping distance matrix showing performer similarity
 
 Chromatic feature analysis across all pianists
 
-## Results Summary
+## Conclusions
 
-All 13 MFCC coefficients differ significantly between pianists (p < 0.001), with effect sizes ranging from medium to large (eta² = 0.018 to 0.476). Pairwise comparisons show:
+### Perceptual-Acoustic Correspondence
+
+A central goal of this study is bridging **subjective listening perception** with **objective acoustic measurement**. Three distinct performance characters emerge consistently across all analysis methods:
+
+**郎朗 (Lang Lang) — Passionate and Driving**
+- Fastest tempo (127s total — 40% faster than Shen Wenyu), with the highest raw recording energy (RMS = 0.178, requiring the largest normalization factor)
+- Dark, powerful tone (737 Hz spectral centroid) — prioritizes momentum over tonal nuance
+- The "unbridled" quality comes from sheer energy and pace, not rhythmic flexibility
+
+**李云迪 (Li Yundi) — Gentle and Expressive**
+- Largest dynamic contrast (230.9 mV range) and highest rhythmic elasticity (timing CV = 0.277)
+- The "gentle" quality is not simply playing softly — it comes from **rich light-and-shade variation** and **elastic, breathing phrasing** (rubato)
+- Most expressive use of dynamics of the three performers
+
+**沈文裕 (Shen Wenyu) — Precise and Restrained**
+- Slowest, most deliberate tempo (209s), brightest and most articulate tone (1,294 Hz — nearly 2× brighter than Lang Lang)
+- Most stable dynamics (125.8 mV) and highest note articulation rate (ZCR = 0.046)
+- The "restrained" quality comes from **clarity and precision**, not lack of expression
+
+### What the ML Analysis Contributes
+
+The statistical and machine learning results confirm that these perceptual differences are not subjective impressions — they are measurable, reproducible patterns:
+
+- All 13 MFCC timbral dimensions differ significantly between performers (p < 0.001, η² = 0.018–0.476)
+- SVM classifier achieves **99.98% accuracy** distinguishing the three performers — each has a unique acoustic fingerprint
+- Style consistency r > 0.98 across all time sections — each performer maintains their character throughout the entire piece
 
 | Comparison | Significantly Different Dimensions | Average Cohen's d | Interpretation |
 |-----------|--------------------------------|-------------------|-----------------|
@@ -382,7 +407,20 @@ All 13 MFCC coefficients differ significantly between pianists (p < 0.001), with
 | Lang Lang vs Shen Wenyu | 13/39 | 0.593 | Medium effect |
 | Li Yundi vs Shen Wenyu | 13/39 | 0.684 | Medium effect |
 
-Style consistency is high across performance sections for all pianists (r > 0.97), indicating stable and recognizable performance signatures.
+Shen Wenyu is acoustically most distinct from the other two, consistent with his technically individualistic approach.
+
+### Research Value
+
+This framework demonstrates that acoustic features can **quantify what listeners intuitively perceive**, enabling:
+
+- **Music education**: Express "play with more flexibility" as a concrete target (e.g., raise timing CV from 0.1 toward Li Yundi's 0.277)
+- **Performance scholarship**: Provide objective evidence alongside critical interpretation, making style claims reproducible and falsifiable
+- **AI music generation**: Encode a performer's style as a feature profile and apply it to synthesized performances
+- **Musicology**: Systematically compare how performers across generations interpret the same work, or how Chinese pianists approach Chinese versus Western repertoire
+
+### Limitations
+
+Audio features capture *what* is happening acoustically but not *why* — differences in tone brightness or timing may reflect technique, instrument, recording conditions, or musical philosophy. Score-aligned analysis (measuring specific notes rather than aggregate features) would provide deeper interpretive insight beyond the current pipeline.
 
 ## Output Files
 
