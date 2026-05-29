@@ -22,15 +22,15 @@ Framework: Each dimension represents a distinct aspect of musical expression:
 【Key Findings】
 ------------------------------------------------------------------------------------------
 
-郎朗:
+郎朗 (Lang Lang):
   Strongest Characteristic: Loudness Variation (0.1455)
   Weakest Characteristic: Attack Sharpness (0.1977)
 
-李云迪:
+李云迪 (Li Yundi):
   Strongest Characteristic: Timing Variability (CV) (0.7954)
   Weakest Characteristic: Staccato Tendency (8.2855)
 
-沈文裕:
+沈文裕 (Shen Wenyu):
   Strongest Characteristic: Staccato Tendency (17.2387)
   Weakest Characteristic: Timing Variability (CV) (0.2026)
 

@@ -42,9 +42,9 @@ plots_path = results_path / "plots"
 plots_path.mkdir(exist_ok=True)
 
 performers_train = {
-    "langlang_caiyun.wav": "郎朗",
-    "liyundi_caiyun.wav": "李云迪",
-    "shenwenyu_caiyun.wav": "沈文裕"
+    "langlang_caiyun.wav": "郎朗 (Lang Lang)",
+    "liyundi_caiyun.wav": "李云迪 (Li Yundi)",
+    "shenwenyu_caiyun.wav": "沈文裕 (Shen Wenyu)"
 }
 
 def extract_features_windowed(y, sr, window_size=2):
@@ -280,14 +280,14 @@ for idx, performer in enumerate(train_performers):
     ax2 = ax.twinx()
     ax2.plot(perf_data['Time_seconds'], perf_data['Spectral_Centroid'], 's-', color='orange', label='Spectral Centroid', linewidth=2, markersize=4)
 
-    ax.set_ylabel('RMS Energy', fontsize=10)
-    ax2.set_ylabel('Spectral Centroid (Hz)', fontsize=10, color='orange')
-    ax.set_title(f'{performer} - Temporal Feature Evolution', fontsize=11, fontweight='bold')
+    ax.set_ylabel('RMS Energy / 能量', fontsize=10)
+    ax2.set_ylabel('Spectral Centroid (Hz) / 谱心频率', fontsize=10, color='orange')
+    ax.set_title(f'{performer} - 时间演化 / Temporal Feature Evolution', fontsize=11, fontweight='bold')
     ax.grid(True, alpha=0.3)
     ax.legend(loc='upper left')
     ax2.legend(loc='upper right')
 
-axes[-1].set_xlabel('Time (seconds)', fontsize=10)
+axes[-1].set_xlabel('Time (seconds) / 时间（秒）', fontsize=10)
 plt.tight_layout()
 plt.savefig(plots_path / "05_temporal_evolution.png", dpi=150)
 plt.close()
@@ -307,22 +307,22 @@ for cluster_id in range(3):
     mask = clusters == cluster_id
     ax.scatter(X_pca[mask, 0], X_pca[mask, 1], alpha=0.5, s=30, label=f'Cluster {cluster_id}')
 
-ax.set_xlabel(f'PC1 ({pca.explained_variance_ratio_[0]:.1%})')
-ax.set_ylabel(f'PC2 ({pca.explained_variance_ratio_[1]:.1%})')
-ax.set_title('K-means Clustering (PCA Projection)')
+ax.set_xlabel(f'PC1 ({pca.explained_variance_ratio_[0]:.1%}) / 主成分1')
+ax.set_ylabel(f'PC2 ({pca.explained_variance_ratio_[1]:.1%}) / 主成分2')
+ax.set_title('K-means聚类 / K-means Clustering (PCA Projection)')
 ax.legend()
 ax.grid(True, alpha=0.3)
 
 # Performer-colored scatter
 ax = axes[1]
-colors = {'郎朗': 'red', '李云迪': 'blue', '沈文裕': 'green'}
+colors = {'郎朗 (Lang Lang)': 'red', '李云迪 (Li Yundi)': 'blue', '沈文裕 (Shen Wenyu)': 'green'}
 for performer in train_performers:
     mask = y_train == performer
     ax.scatter(X_pca[mask, 0], X_pca[mask, 1], alpha=0.5, s=30, label=performer, color=colors[performer])
 
-ax.set_xlabel(f'PC1 ({pca.explained_variance_ratio_[0]:.1%})')
-ax.set_ylabel(f'PC2 ({pca.explained_variance_ratio_[1]:.1%})')
-ax.set_title('Actual Performer Groups (PCA Projection)')
+ax.set_xlabel(f'PC1 ({pca.explained_variance_ratio_[0]:.1%}) / 主成分1')
+ax.set_ylabel(f'PC2 ({pca.explained_variance_ratio_[1]:.1%}) / 主成分2')
+ax.set_title('实际演奏家分组 / Actual Performer Groups (PCA Projection)')
 ax.legend()
 ax.grid(True, alpha=0.3)
 
@@ -336,8 +336,8 @@ print("  Generating effect size heatmap...", end=" ")
 fig, ax = plt.subplots(figsize=(10, 6))
 anova_df_plot = pd.DataFrame(anova_results).set_index('MFCC')
 sns.heatmap(anova_df_plot[['F', 'eta_sq']], annot=True, fmt='.2f', cmap='RdYlGn', ax=ax)
-ax.set_title('ANOVA F-statistics and Effect Sizes (Eta-squared)')
-ax.set_ylabel('MFCC Coefficient')
+ax.set_title('ANOVA F统计量和效应大小 / ANOVA F-statistics and Effect Sizes (Eta-squared)')
+ax.set_ylabel('MFCC系数 / MFCC Coefficient')
 plt.tight_layout()
 plt.savefig(plots_path / "07_effect_size_heatmap.png", dpi=150)
 plt.close()
@@ -347,9 +347,9 @@ print("  Generating hierarchical clustering dendrogram...", end=" ")
 
 fig, ax = plt.subplots(figsize=(12, 6))
 dendrogram(linkage_matrix, ax=ax)
-ax.set_title('Hierarchical Clustering of Performance Frames')
-ax.set_xlabel('Frame Index')
-ax.set_ylabel('Distance')
+ax.set_title('演奏帧的层次聚类 / Hierarchical Clustering of Performance Frames')
+ax.set_xlabel('帧索引 / Frame Index')
+ax.set_ylabel('距离 / Distance')
 plt.tight_layout()
 plt.savefig(plots_path / "08_hierarchical_dendrogram.png", dpi=150)
 plt.close()

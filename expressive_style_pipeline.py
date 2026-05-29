@@ -35,9 +35,9 @@ plots_path = results_path / "plots"
 plots_path.mkdir(exist_ok=True)
 
 performers = {
-    "langlang_caiyun.wav": "郎朗",
-    "liyundi_caiyun.wav": "李云迪",
-    "shenwenyu_caiyun.wav": "沈文裕"
+    "langlang_caiyun.wav": "郎朗 (Lang Lang)",
+    "liyundi_caiyun.wav": "李云迪 (Li Yundi)",
+    "shenwenyu_caiyun.wav": "沈文裕 (Shen Wenyu)"
 }
 
 def analyze_timing_deviations(y, sr):
@@ -571,9 +571,9 @@ for idx, performer in enumerate(performers.values()):
     ax.fill(angles, values, alpha=0.25)
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(
-        ['Timing', 'Dynamics', 'Articulation', 'Vibrato', 'Tone',
-         'Attack', 'Sustain', 'Rubato', 'Agogic'],
-        size=9
+        ['节奏\nTiming', '力度\nDynamics', '音符\nArticulation', '颤音\nVibrato', '音色\nTone',
+         '起音\nAttack', '持续\nSustain', '速度\nRubato', '重音\nAgogic'],
+        size=8
     )
     ax.set_ylim(0, 1)
     ax.set_title(performer, fontsize=12, fontweight='bold', pad=20)
@@ -590,6 +590,18 @@ print("  Generating dimension comparison chart...", end=" ")
 fig, axes = plt.subplots(3, 3, figsize=(16, 12))
 axes = axes.flatten()
 
+dimension_cn_mapping = {
+    'Timing Variability (CV)': '节奏灵活度',
+    'Loudness Variation': '力度变化',
+    'Staccato Tendency': '断奏倾向',
+    'Vibrato Prevalence': '颤音频率',
+    'Tone Brightness (Hz)': '音色明亮度',
+    'Attack Sharpness': '起音清晰',
+    'Sustain Consistency': '音符持续',
+    'Rubato Coefficient': '速度自由度',
+    'Agogic Accent Frequency': '时间重音'
+}
+
 for idx, dimension in enumerate(dimensions):
     ax = axes[idx]
 
@@ -598,8 +610,11 @@ for idx, dimension in enumerate(dimensions):
 
     bars = ax.bar(data['Performer'], data[dimension], color=colors, alpha=0.8, edgecolor='black', linewidth=1.5)
 
-    ax.set_title(dimension, fontsize=11, fontweight='bold')
+    cn_title = dimension_cn_mapping.get(dimension, dimension)
+    ax.set_title(f'{cn_title}\n{dimension}', fontsize=10, fontweight='bold')
     ax.grid(True, alpha=0.3, axis='y')
+    ax.set_xlabel('Performers / 演奏家', fontsize=9)
+    ax.set_ylabel('Value / 数值', fontsize=9)
 
     for bar in bars:
         height = bar.get_height()
