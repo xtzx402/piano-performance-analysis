@@ -165,7 +165,7 @@ This analysis compares each pianist's performance against the official sheet mus
 - Key: B Major (五个升号 / 5 sharps)
 - Time: 4/4 (四四拍)
 - Dynamics: p → mf → ff → pp
-- Arrangement: 王港中 (Wang Jianzong, 1975)
+- Arrangement: 王建中 (Wang Jianzong, 1975)
 
 **Key Findings:**
 
