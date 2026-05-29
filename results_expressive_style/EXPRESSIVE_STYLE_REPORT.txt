@@ -1,0 +1,37 @@
+
+==========================================================================================
+EXPRESSIVE PERFORMANCE STYLE ANALYSIS - COMPREHENSIVE REPORT
+==========================================================================================
+
+【Nine Dimensional Expressive Analysis】
+------------------------------------------------------------------------------------------
+
+Framework: Each dimension represents a distinct aspect of musical expression:
+
+1. TIMING (节奏感) - How flexible is the performer with tempo?
+2. DYNAMICS (力度感) - How varied is the volume/intensity?
+3. ARTICULATION (音符连接) - Legato vs Staccato tendencies?
+4. VIBRATO (颤音) - How much pitch modulation is used?
+5. TONE COLOR (音色) - Brightness and richness of tone?
+6. ATTACK (音符起始) - How sharp/clear are note onsets?
+7. SUSTAIN (音符持续) - How long are notes held?
+8. RUBATO (节奏自由) - How much artistic freedom in timing?
+9. AGOGIC ACCENT (时间重音) - Expressive timing deviations?
+
+
+【Key Findings】
+------------------------------------------------------------------------------------------
+
+郎朗:
+  Strongest Characteristic: Loudness Variation (0.1455)
+  Weakest Characteristic: Attack Sharpness (0.1977)
+
+李云迪:
+  Strongest Characteristic: Timing Variability (CV) (0.7954)
+  Weakest Characteristic: Staccato Tendency (8.2855)
+
+沈文裕:
+  Strongest Characteristic: Staccato Tendency (17.2387)
+  Weakest Characteristic: Timing Variability (CV) (0.2026)
+
+==========================================================================================
