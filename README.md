@@ -83,7 +83,7 @@ Sound project/
     ├── confusion_matrix.csv
     └── analysis_report.txt
 
-DATA FILES (⭐ NEW - Standard Comparison)
+DATA FILES
 ├── caiyun_reference_standard.mid        # Standard MIDI reference
 ├── performance_vs_standard.csv          # Performer comparison metrics
 └── performance_interpretation_analysis.csv
@@ -152,7 +152,7 @@ python ultimate_pipeline.py
 
 ## Visualizations
 
-### 🎵 Standard Sheet Music Comparison (NEW!)
+### 🎵 Standard Sheet Music Comparison
 
 #### Pianist Performance vs Official Score
 
