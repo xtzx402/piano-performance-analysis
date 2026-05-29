@@ -1,4 +1,4 @@
-# Piano Performance Style Analysis - ICASSP 2026
+# Piano Performance Style Analysis 
 
 A comprehensive music information retrieval (MIR) research project comparing the expressive performance styles of three renowned Chinese pianists performing the traditional Chinese piece "彩云追月" (Colorful Clouds Chasing the Moon).
 
