@@ -43,7 +43,7 @@ See `audio_normalization.py` for the normalization pipeline. Normalized audio fi
 Sound project/
 ├── README.md
 ├── .gitignore
-├── 62a57402e5a6c.pdf                    # Official sheet music (王港中 1975 arrangement)
+├── 62a57402e5a6c.pdf                    # Official sheet music (王建中 1975 arrangement)
 │
 ├── AUDIO NORMALIZATION
 ├── audio_normalization.py                # Normalize audio files
