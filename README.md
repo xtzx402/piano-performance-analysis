@@ -120,17 +120,6 @@ Style consistency is high across performance sections for all pianists (r > 0.97
 - `enhanced_pipeline.py` generates: Feature statistics, SVM classifier performance metrics
 - `expressive_style_pipeline.py` generates: 9-dimensional metrics, radar charts, dimension comparison grid, narrative report
 
-## Citation
-
-If you use this research, please cite:
-
-```
-@inproceedings{piano_style_2026,
-  title={Expressive Performance Style Analysis: Comparing Three Masters of Chinese Piano Performance},
-  author={Your Name},
-  booktitle={ICASSP 2026},
-  year={2026}
-}
 ```
 
 ## License
