@@ -7,81 +7,81 @@ ULTIMATE PIANO PERFORMANCE ANALYSIS - COMPREHENSIVE REPORT
 ------------------------------------------------------------------------------------------
 Total MFCC dimensions analyzed: 13
 Significantly different dimensions: 13/13 (p < 0.05)
-Average effect size (eta-squared): 0.0907
+Average effect size (eta-squared): 0.1396
 
 【2】PAIRWISE COMPARISONS (Tukey HSD)
 ------------------------------------------------------------------------------------------
 
 郎朗 (Lang Lang) vs 李云迪 (Li Yundi):
-  Significantly different dimensions: 12/39 (across all MFCCs)
-  Average effect size (Cohen's d): 0.158
+  Significantly different dimensions: 13/39 (across all MFCCs)
+  Average effect size (Cohen's d): 0.460
   Interpretation: Small effect
 
 郎朗 (Lang Lang) vs 沈文裕 (Shen Wenyu):
   Significantly different dimensions: 13/39 (across all MFCCs)
-  Average effect size (Cohen's d): 0.593
-  Interpretation: Medium effect
+  Average effect size (Cohen's d): 0.854
+  Interpretation: Large effect
 
 李云迪 (Li Yundi) vs 沈文裕 (Shen Wenyu):
   Significantly different dimensions: 13/39 (across all MFCCs)
-  Average effect size (Cohen's d): 0.684
+  Average effect size (Cohen's d): 0.569
   Interpretation: Medium effect
 
 【3】TEMPORAL CHARACTERISTICS
 ------------------------------------------------------------------------------------------
 
 郎朗 (Lang Lang):
-  Total duration: 190.0 seconds
-  Time windows analyzed: 96
-  RMS energy (mean ± std): 0.0423 ± 0.0428
-  Spectral centroid (mean ± std): 855.6 ± 216.6 Hz
+  Total duration: 124.0 seconds
+  Time windows analyzed: 63
+  RMS energy (mean ± std): 0.1342 ± 0.1071
+  Spectral centroid (mean ± std): 735.7 ± 112.7 Hz
 
 李云迪 (Li Yundi):
-  Total duration: 226.0 seconds
-  Time windows analyzed: 114
-  RMS energy (mean ± std): 0.0352 ± 0.0344
-  Spectral centroid (mean ± std): 812.1 ± 304.5 Hz
+  Total duration: 186.0 seconds
+  Time windows analyzed: 94
+  RMS energy (mean ± std): 0.0396 ± 0.0347
+  Spectral centroid (mean ± std): 838.4 ± 174.9 Hz
 
 沈文裕 (Shen Wenyu):
-  Total duration: 138.0 seconds
-  Time windows analyzed: 70
-  RMS energy (mean ± std): 0.0527 ± 0.0117
-  Spectral centroid (mean ± std): 1197.3 ± 456.7 Hz
+  Total duration: 206.0 seconds
+  Time windows analyzed: 104
+  RMS energy (mean ± std): 0.0416 ± 0.0239
+  Spectral centroid (mean ± std): 1575.0 ± 932.2 Hz
 
 【4】CLUSTERING ANALYSIS
 ------------------------------------------------------------------------------------------
 K-means clustering (k=3) results:
 
 Cluster 0:
-  郎朗 (Lang Lang): 5548 frames (46.5%)
-  李云迪 (Li Yundi): 5955 frames (49.9%)
-  沈文裕 (Shen Wenyu): 420 frames (3.5%)
+  郎朗 (Lang Lang): 5459 frames (31.0%)
+  李云迪 (Li Yundi): 8693 frames (49.4%)
+  沈文裕 (Shen Wenyu): 3438 frames (19.5%)
 
 Cluster 1:
-  郎朗 (Lang Lang): 5225 frames (24.6%)
-  李云迪 (Li Yundi): 4421 frames (20.8%)
-  沈文裕 (Shen Wenyu): 11566 frames (54.5%)
+  郎朗 (Lang Lang): 292 frames (1.7%)
+  李云迪 (Li Yundi): 4525 frames (26.3%)
+  沈文裕 (Shen Wenyu): 12400 frames (72.0%)
 
 Cluster 2:
-  郎朗 (Lang Lang): 7330 frames (39.7%)
-  李云迪 (Li Yundi): 11011 frames (59.7%)
-  沈文裕 (Shen Wenyu): 109 frames (0.6%)
+  郎朗 (Lang Lang): 5219 frames (50.1%)
+  李云迪 (Li Yundi): 2997 frames (28.8%)
+  沈文裕 (Shen Wenyu): 2192 frames (21.1%)
 
 【5】STYLE CONSISTENCY ACROSS TIME
 ------------------------------------------------------------------------------------------
 
 郎朗 (Lang Lang):
-  Cross-piece correlation: 0.9800
+  Cross-piece correlation: 0.9795
   Consistency level: High Consistency
   Implication: Performance characteristics are stable over time
 
 李云迪 (Li Yundi):
-  Cross-piece correlation: 0.9706
+  Cross-piece correlation: 0.9851
   Consistency level: High Consistency
   Implication: Performance characteristics are stable over time
 
 沈文裕 (Shen Wenyu):
-  Cross-piece correlation: 0.9996
+  Cross-piece correlation: 0.9933
   Consistency level: High Consistency
   Implication: Performance characteristics are stable over time
 
