@@ -55,13 +55,13 @@ ax_tempo.set_title('节奏一致性 / Tempo Consistency (IOI)\n(音符间隔的�
 ax_summary = axes[1, 1]
 ax_summary.axis('off')
 
-summary_text = "【三位钢琴家与标准乐谱的对比】\n" + "="*40 + "\n\n"
-summary_text += "标准乐谱参数 / Standard Parameters:\n"
-summary_text += "• 速度标记：Moderato Chiaramente ≈ 90 BPM\n"
-summary_text += "• 调号：B Major (五个升号)\n"
-summary_text += "• 拍号：4/4\n"
-summary_text += "• 标准时长：~150秒\n"
-summary_text += "• 力度：p → mf → ff → pp\n\n"
+summary_text = "Three Pianists vs Standard Score\n" + "="*40 + "\n\n"
+summary_text += "Standard Parameters:\n"
+summary_text += "• Tempo: Moderato Chiaramente ≈ 90 BPM\n"
+summary_text += "• Key: B Major (5 sharps)\n"
+summary_text += "• Time: 4/4\n"
+summary_text += "• Standard Duration: ~150 seconds\n"
+summary_text += "• Dynamics: p → mf → ff → pp\n\n"
 
 # Analyze each performer
 all_data = []
@@ -157,17 +157,17 @@ ax_tempo.grid(True, alpha=0.3)
 ax_tempo.axhline(y=90, color='red', linestyle='--', linewidth=2, alpha=0.7, label='标准速度 (90 BPM)')
 
 # Configure Plot 4: Summary Statistics
-summary_text += "演奏家数据 / Pianist Data:\n"
+summary_text += "Pianist Data:\n"
 summary_text += "-"*40 + "\n"
 
 for data in all_data:
     summary_text += f"\n{data['Performer']}:\n"
-    summary_text += f"  时长: {data['Duration (s)']:.1f}秒\n"
-    summary_text += f"  平均RMS: {data['Avg RMS']:.4f}\n"
-    summary_text += f"  RMS变化: {data['RMS Std']:.4f}\n"
-    summary_text += f"  平均音色亮度: {data['Avg Spectral Centroid (Hz)']:.0f} Hz\n"
-    summary_text += f"  估计速度: {data['Estimated Tempo (BPM)']:.1f} BPM\n"
-    summary_text += f"  节奏稳定性: CV = {data['IOI Consistency (CV)']:.4f}\n"
+    summary_text += f"  Duration: {data['Duration (s)']:.1f}s\n"
+    summary_text += f"  Avg RMS: {data['Avg RMS']:.4f}\n"
+    summary_text += f"  RMS Std: {data['RMS Std']:.4f}\n"
+    summary_text += f"  Spectral Centroid: {data['Avg Spectral Centroid (Hz)']:.0f} Hz\n"
+    summary_text += f"  Tempo: {data['Estimated Tempo (BPM)']:.1f} BPM\n"
+    summary_text += f"  Rhythm Stability (CV): {data['IOI Consistency (CV)']:.4f}\n"
 
 ax_summary.text(0.05, 0.95, summary_text, transform=ax_summary.transAxes,
                fontsize=9, verticalalignment='top', fontfamily='monospace',

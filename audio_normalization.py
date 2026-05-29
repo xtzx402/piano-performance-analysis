@@ -63,38 +63,32 @@ for filename, performer_name in performers_data.items():
     print(f"  原始RMS能量 / Original RMS: {original_rms:.6f}")
 
     # Step 1: Detect leading silence and trim
-    # Use energy-based detection
-    S = librosa.feature.melspectrogram(y=y, sr=sr)
-    S_db = librosa.power_to_db(S, ref=np.max)
-    energy = np.mean(S_db, axis=0)
+    # Use onset detection to find the first real note (more accurate than energy threshold)
+    onset_env = librosa.onset.onset_strength(y=y, sr=sr, hop_length=512)
+    onset_frames = librosa.util.peak_pick(onset_env, pre_max=3, post_max=3,
+                                          pre_avg=3, post_avg=3, delta=0.1, wait=10)
 
-    # Find threshold (silence threshold)
-    threshold = np.percentile(energy, 5)
-
-    # Find first frame above threshold
-    frames_above = np.where(energy > threshold)[0]
-
-    if len(frames_above) > 0:
-        first_frame = frames_above[0]
-        # Add some margin (0.5 seconds before)
-        margin_frames = int(0.5 * sr / (y.shape[0] / (librosa.get_duration(y=y, sr=sr))))
-        start_frame = max(0, first_frame - margin_frames)
-        start_sample = librosa.frames_to_samples(start_frame, hop_length=512)
+    if len(onset_frames) > 0:
+        # First note onset
+        first_onset_frame = onset_frames[0]
+        # Add small margin (0.1 seconds before) to capture attack
+        margin_samples = int(0.1 * sr)
+        start_sample = max(0, librosa.frames_to_samples(first_onset_frame, hop_length=512) - margin_samples)
 
         # Trim
         y_trimmed = y[start_sample:]
         trimmed_duration = librosa.get_duration(y=y_trimmed, sr=sr)
         trimmed_rms = np.sqrt(np.mean(y_trimmed**2))
 
-        print(f"\n  检测结果 / Detection Result:")
-        print(f"  • 检测到的开始点 / Detected start: {start_sample/sr:.2f}s")
-        print(f"  • 去除沉默后时长 / Trimmed duration: {trimmed_duration:.2f}s")
-        print(f"  • 去除沉默后RMS / Trimmed RMS: {trimmed_rms:.6f}")
+        print(f"\n  Detection Result (onset-based):")
+        print(f"  • First note onset: {start_sample/sr:.2f}s")
+        print(f"  • Trimmed duration: {trimmed_duration:.2f}s")
+        print(f"  • Trimmed RMS: {trimmed_rms:.6f}")
     else:
         y_trimmed = y
         trimmed_duration = original_duration
         trimmed_rms = original_rms
-        print(f"  ⚠ 无法检测到明显开始点 / Could not detect clear start point")
+        print(f"  Warning: Could not detect clear note onset")
 
     # Step 2: Normalize RMS energy
     # Scale to target RMS
@@ -145,7 +139,7 @@ for filename, performer_name in performers_data.items():
         'Original SR (Hz)': original_sr,
         'Original Duration (s)': original_duration,
         'Original RMS': original_rms,
-        'Start Point Detected (s)': start_sample/sr if len(frames_above) > 0 else 0,
+        'Start Point Detected (s)': start_sample/sr if len(onset_frames) > 0 else 0,
         'Trimmed Duration (s)': trimmed_duration,
         'Trimmed RMS': trimmed_rms,
         'Scale Factor': scale_factor,
