@@ -20,6 +20,23 @@ Through multi-dimensional audio feature analysis using standard MIR techniques.
 - **Temporal Analysis**: 2-second windowed feature extraction and style consistency metrics
 - **Comprehensive Visualizations**: Radar charts, clustering dendrograms, temporal curves, dimension comparisons, standard comparison charts
 
+## Audio Normalization ⭐ NEW
+
+To ensure fair comparison, all audio files are normalized to:
+- **Sample Rate**: 22,050 Hz (uniform resampling)
+- **RMS Energy Level**: 0.05 (consistent loudness)
+- **Leading Silence Removed**: Time-aligned audio content
+- **Audio Format**: PCM WAV mono/stereo
+
+See `audio_normalization.py` for the normalization pipeline. Normalized audio files are stored in `normalized_audio/` directory.
+
+### Normalization Results
+| Pianist | Original Duration | Normalized Duration | Original RMS | Scale Factor |
+|---------|------------------|-------------------|------------|--------------|
+| Lang Lang | 127.36s | 127.30s | 0.1787 | 0.2798x |
+| Li Yundi | 188.24s | 185.99s | 0.0551 | 0.9028x |
+| Shen Wenyu | 209.32s | 209.17s | 0.0499 | 1.0014x |
+
 ## Project Structure
 
 ```
@@ -27,6 +44,14 @@ Sound project/
 ├── README.md
 ├── .gitignore
 ├── 62a57402e5a6c.pdf                    # Official sheet music (王港中 1975 arrangement)
+│
+├── AUDIO NORMALIZATION
+├── audio_normalization.py                # ⭐ NEW: Normalize audio files
+├── comparative_analysis_normalized.py    # ⭐ NEW: Fair comparison of normalized audio
+├── normalized_audio/                     # ⭐ NEW: Standardized audio files
+│   ├── normalized_langlang_caiyun.wav
+│   ├── normalized_liyundi_caiyun.wav
+│   └── normalized_shenwenyu_caiyun.wav
 │
 ├── ANALYSIS PIPELINES
 ├── ultimate_pipeline.py                 # Comprehensive statistical analysis
@@ -96,37 +121,60 @@ DATA FILES (⭐ NEW - Standard Comparison)
 pip install librosa scipy scikit-learn pandas numpy matplotlib seaborn soundfile fastdtw
 ```
 
+### Audio Normalization (Optional - Pre-computed)
+The audio files have already been normalized and stored in `normalized_audio/`. If you need to normalize raw audio:
+
+```bash
+# Normalize raw audio files
+python audio_normalization.py
+
+# This will:
+# - Detect and remove leading silence
+# - Standardize RMS energy to 0.05
+# - Resample all files to 22,050 Hz
+# - Output to normalized_audio/ directory
+```
+
 ### Run Analysis
 ```bash
+# Run comparative analysis on normalized audio
+python comparative_analysis_normalized.py
+
 # Run the comprehensive 9-dimensional expressive analysis
 python expressive_style_pipeline.py
 
 # Or run advanced statistical analysis
 python ultimate_pipeline.py
+
+# Or run initial music analysis
+python music_analysis_pipeline.py
 ```
 
-## Key Findings
+## Key Findings (Based on Normalized Audio)
 
-### 郎朗 (Lang Lang) - "The Balanced Artist"
-- **Tempo**: 351 BPM (slowest, most lyrical)
-- **Timing Flexibility**: CV = 0.40 (moderate rubato)
-- **Tone**: Dark and simple (867 Hz)
-- **Vibrato**: Deep (41.6 Hz), moderate prevalence
-- **Attack**: Soft and gentle (0.20)
+### 郎朗 (Lang Lang) - "The Virtuoso Technician"
+- **Performance Duration**: 127.3 seconds (fastest)
+- **Tone Brightness**: 754 Hz (dark tone)
+- **Timing Flexibility**: CV = 0.198 (most strict/precise rhythm)
+- **Dynamic Range**: 170.6 mV (moderate variations)
+- **Zero Crossing Rate**: 0.0262 (lowest - cleaner tone)
+- **Signature**: Fast execution, precise timing, dark tone quality
 
-### 李云迪 (Li Yundi) - "The Rhythmic Poet"
-- **Tempo**: 362 BPM
-- **Timing Flexibility**: CV = 0.80 (HIGHEST - maximum artistic freedom)
-- **Tone**: Dark and simple (809 Hz)
-- **Vibrato**: Deepest (62.2 Hz) but least frequent
-- **Attack**: Softest (0.19)
+### 李云迪 (Li Yundi) - "The Expressive Artist"
+- **Performance Duration**: 186.0 seconds (moderate)
+- **Tone Brightness**: 772 Hz (dark tone, similar to Lang Lang)
+- **Timing Flexibility**: CV = 0.277 (HIGHEST - maximum artistic freedom/rubato)
+- **Dynamic Range**: 230.9 mV (LARGEST - most expressive dynamics)
+- **Zero Crossing Rate**: 0.0306 (moderate)
+- **Signature**: Rhythmic flexibility, dramatic dynamics, expressive interpretation
 
-### 沈文裕 (Shen Wenyu) - "The Virtuosic Technician"
-- **Tempo**: 366 BPM (fastest)
-- **Timing Flexibility**: CV = 0.20 (LOWEST - most precise rhythm)
-- **Dynamics**: 71 dB range (DRAMATIC contrast vs. others' 0 dB)
-- **Tone**: Bright and rich (1205 Hz)
-- **Attack**: Sharpest and most defined (0.31)
+### 沈文裕 (Shen Wenyu) - "The Lyrical Interpreter"
+- **Performance Duration**: 209.2 seconds (longest, slowest tempo)
+- **Tone Brightness**: 1,294 Hz (BRIGHTEST - significantly brighter tone) ⭐
+- **Timing Flexibility**: CV = 0.219 (moderate control)
+- **Dynamic Range**: 125.8 mV (most controlled/stable dynamics)
+- **Zero Crossing Rate**: 0.0460 (highest - detailed articulation)
+- **Signature**: Lyrical phrasing, bright tone, stable interpretation
 
 ## Technical Details
 
