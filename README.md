@@ -77,6 +77,22 @@ The **cadenza — 华彩** is the section of maximum divergence across all dimen
 
 ---
 
+### Answering the Central Question
+
+> *Which acoustic properties actually create these perceptions — and are our intuitions correct?*
+
+Our intuitions are directionally right but mechanistically wrong in every case.
+
+**Lang Lang does sound energetic** — but the source is tempo (135 BPM, 18% above score), not dynamics. His ForteRatio is moderate and his attack sharpness is the lowest of the three. The "powerful" impression is a perceptual effect of pace and note density, not of hitting harder.
+
+**Li Yundi does sound lyrical** — but not because of blurred legato softness. He is actually the most precisely articulate performer (highest attack sharpness, fastest decay). His lyricism comes from deploying that precision at the softest dynamic level. Clarity, not vagueness, is his tool.
+
+**Shen Wenyu does sound intense** — and this intuition is the most accurate. His dynamic contrast is genuinely the most extreme. But this is only verifiable through device-independent normalisation; a naive amplitude comparison would rank him last.
+
+In short: perceived character maps to real acoustic structure, but the mechanism behind each impression is consistently counterintuitive.
+
+---
+
 ## Performer Profiles
 
 **郎朗 Lang Lang — The Velocity Architect**
