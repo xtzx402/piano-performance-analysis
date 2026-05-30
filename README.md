@@ -1,5 +1,5 @@
 # Piano Performance Style Analysis
-## 《彩云追月》三位演奏者风格比较 · Colorful Clouds Chasing the Moon
+## Colorful Clouds Chasing the Moon · 《彩云追月》
 
 A music information retrieval (MIR) project comparing the expressive performance styles of three renowned Chinese pianists — **Lang Lang**, **Li Yundi**, and **Shen Wenyu** — performing the Wang Jianzhong 1975 piano arrangement of 彩云追月.
 
@@ -54,7 +54,7 @@ Shen Wenyu's home recording has the **lowest absolute amplitude** (peak RMS = 0.
 
 After **noise-subtracted peak-normalisation** (removing recording gain differences):
 - His overall ForteRatio (13.3%) is **3× Lang Lang's** (4.4%) and **9× Li Yundi's** (1.4%)
-- In the **华彩 cadenza** alone, his ForteRatio reaches **28.8%** — 7.4× Li Yundi's 3.9%
+- In the **cadenza (华彩)** alone, his ForteRatio reaches **28.8%** — 7.4× Li Yundi's 3.9%
 
 The dynamic contrast that defines his "intense" impression is real, but **invisible without device-independent measurement**.
 
@@ -71,9 +71,9 @@ Despite widely different styles, all three performers share one structural prope
 | 华彩 (Cadenza) | 135 BPM | 92 BPM | 85 BPM |
 | 尾声 (Coda) | 135 BPM | 92 BPM | 86 BPM |
 
-None of the three uses section-level tempo changes as an expressive tool. Instead, all musical expression occurs at the **note level**: per-note agogic deviations of 60–470 ms relative to the expected beat, concentrated especially in the 尾声 (Li Yundi std = 470 ms).
+None of the three uses section-level tempo changes as an expressive tool. Instead, all musical expression occurs at the **note level**: per-note agogic deviations of 60–470 ms relative to the expected beat, concentrated especially in the coda — 尾声 (Li Yundi std = 470 ms).
 
-The **华彩 cadenza** is the section of maximum divergence across all dimensions — ForteRatio differs by 7.4× between performers, making it the strongest single discriminant of style.
+The **cadenza — 华彩** is the section of maximum divergence across all dimensions — ForteRatio differs by 7.4× between performers, making it the strongest single discriminant of style.
 
 ---
 
@@ -87,12 +87,12 @@ The **华彩 cadenza** is the section of maximum divergence across all dimension
 **李云迪 Li Yundi — The Articulate Whisperer**
 - Sharpest attack (0.225) and fastest decay — most precisely defined note boundaries
 - Softest sustained dynamics (1.4%); highest rhythmic freedom (Timing CV = 0.286)
-- 尾声 ending: near-silent with extreme temporal freedom (agogic std = 470 ms)
+- Coda (尾声) ending: near-silent with extreme temporal freedom (agogic std = 470 ms)
 
 **沈文裕 Shen Wenyu — The Dynamic Extremist**
-- Most extreme forte–piano contrast; 华彩 ForteRatio = 28.8% (7.4× Li Yundi)
+- Most extreme forte–piano contrast; cadenza (华彩) ForteRatio = 28.8% (7.4× Li Yundi)
 - Home recording is the quietest in absolute terms — paradox invisible without normalisation
-- Slowest tempo (85 BPM); rushes ahead most in opening A段 (agogic mean = −45 ms)
+- Slowest tempo (85 BPM); rushes ahead most in opening theme (A段, agogic mean = −45 ms)
 
 ---
 
@@ -203,7 +203,7 @@ Raw vs device-independent RMS. Shen Wenyu is quietest in absolute level but show
 ### Note-Level Agogic Deviation
 ![Agogic Deviation](results_ultimate/plots/17_agogic_deviation.png)
 
-Per-note timing deviation from expected beat. B段 is the most metronomic section; Li Yundi's 尾声 has extreme freedom (std = 470 ms).
+Per-note timing deviation from expected beat. The lyrical interlude (B段) is the most metronomic section; Li Yundi's coda (尾声) has extreme temporal freedom (std = 470 ms).
 
 ### Local BPM
 ![Local BPM](results_ultimate/plots/21_local_bpm_curves.png)
@@ -213,7 +213,7 @@ All three performers maintain consistent tempo throughout the piece. Expression 
 ### Section Comparison
 ![Section Comparison](results_ultimate/plots/14_section_comparison.png)
 
-华彩 cadenza is the widest point of divergence across all metrics.
+The cadenza (华彩) is the widest point of divergence across all metrics.
 
 ---
 
