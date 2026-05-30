@@ -1,50 +1,158 @@
 # Piano Performance Style Analysis
 
-A comprehensive music information retrieval (MIR) research project comparing the expressive performance styles of three renowned Chinese pianists performing 彩云追月 (Colorful Clouds Chasing the Moon, Wang Jianzhong 1975 piano arrangement).
+A music information retrieval (MIR) project comparing the expressive performance styles of three renowned Chinese pianists performing 彩云追月 (Colorful Clouds Chasing the Moon, Wang Jianzhong 1975 piano arrangement).
 
-## Overview
+## Performers
 
-This project analyzes and compares the musical characteristics of three pianists:
-- **郎朗** (Lang Lang)
-- **李云迪** (Li Yundi)
-- **沈文裕** (Shen Wenyu)
+- **郎朗** (Lang Lang) — Live stage performance, 127.4 s
+- **李云迪** (Li Yundi) — Studio recording, 187.2 s
+- **沈文裕** (Shen Wenyu) — Home recording, 201.9 s
 
-Through multi-dimensional audio feature analysis using standard MIR techniques, anchored by a **mechanical score baseline** derived from the actual printed sheet music.
+## Analysis Overview
 
-## Key Features
+All analyses are anchored to a **mechanical score baseline** derived from the Wang Jianzhong MIDI (114 BPM). Four layers of analysis are stacked from coarse to fine:
 
-- **Score Baseline Comparison**: Performer deviations measured against the Wang Jianzhong MIDI (114 BPM) as mechanical ground truth
-- **Device-Independent Amplitude Analysis**: Two-step debiasing removes recording noise and gain differences to enable fair cross-recording dynamics comparison
-- **9-Dimensional Expressive Analysis**: Timing, Dynamics, Articulation, Vibrato, Tone Color, Attack, Sustain, Rubato, and Agogic Accents
-- **Advanced Statistical Analysis**: ANOVA with Bonferroni correction (α = 0.05/13 = 0.0038), Tukey HSD post-hoc tests, effect size calculations (Cohen's d, eta-squared)
-- **Machine Learning**: SVM classification with permutation-based feature importance; K-means clustering
-- **Temporal Analysis**: 2-second windowed feature extraction and temporal self-consistency metrics
-- **Comprehensive Visualizations**: Radar charts, clustering dendrograms, temporal curves, score deviation bar charts
+| Layer | Script | What it measures |
+|-------|--------|-----------------|
+| Global comparison | `score_vs_performers.py` | Tempo, dynamics, rubato vs. score |
+| Statistical classification | `ultimate_pipeline.py`, `enhanced_pipeline.py` | MFCC timbral distinctiveness |
+| Section-by-section | `section_analysis.py` | Per-section dynamics and timing within each performer |
+| Note-level alignment | `note_alignment.py` | Per-note agogic deviation (ms) relative to expected beat |
+| Dynamics paradox | `dynamics_paradox.py` | Device-independent amplitude methodology demonstration |
+
+---
 
 ## Audio Preprocessing
 
-To ensure fair comparison, all audio files are processed through:
-- **Sample Rate**: 22,050 Hz (uniform resampling)
-- **Leading Silence Removed**: Onset-aligned audio content (Shen Wenyu's home recording had 7.4s of pre-music noise trimmed)
-- **Noise-Subtracted, Peak-Normalized RMS**: For cross-recording dynamics comparison, each recording's noise floor (5th-percentile RMS) is subtracted, then peak-normalized to 1.0 — removing both microphone noise bias and recording gain differences while preserving genuine dynamic effort
+All recordings are processed through a two-step device-independent normalization before any cross-recording comparison:
 
-See `audio_normalization.py` for the normalization pipeline. Normalized audio files are stored in `normalized_audio/`.
+1. **Noise floor subtraction**: 5th-percentile RMS frame is treated as the recording noise floor and subtracted from every frame
+2. **Peak normalization**: Residual RMS is scaled so the maximum equals 1.0
 
-### Preprocessing Results
+This removes microphone noise bias and recording gain differences, so dynamic comparisons reflect genuine musical effort rather than equipment.
+
 | Pianist | Recording Type | Duration | Notes |
 |---------|---------------|----------|-------|
-| Lang Lang | Live stage performance | 127.4s | Starts immediately at first note |
-| Li Yundi | Studio | 187.2s | — |
-| Shen Wenyu | Home recording | 201.9s | 7.4s pre-music noise trimmed |
+| Lang Lang | Live stage performance | 127.4 s | No pre-music silence |
+| Li Yundi | Studio | 187.2 s | — |
+| Shen Wenyu | Home recording | 201.9 s | 7.4 s pre-music noise trimmed |
 
-## Score Baseline
+See `audio_normalization.py` for the pipeline. Normalized files are in `normalized_audio/`.
 
-The Wang Jianzhong arrangement MIDI (`cai-yun-zhui-yue-ren-guang-qu-wang-jian-zhong-gai-bian.mid`) was obtained via optical music recognition (OMR) from the printed score PDF. Key properties:
-- **BPM**: 114 (set_tempo from MIDI metadata)
-- **Duration**: 150.5 seconds (mechanical playback)
-- **Timing CV**: 0.0 (by definition — MIDI is perfectly metronomic)
+---
 
-`synthesize_reference.py` converts the MIDI to `reference_score.wav` using additive sine-wave synthesis (fundamental + 4 harmonics, exponential decay envelope).
+## Key Findings
+
+### 1. Global Pace and Dynamics
+
+Score baseline: **150.5 s, 114 BPM, Timing CV = 0.000** (mechanical).
+
+| Pianist | Duration | Pace vs Score | ForteRatio | TimingCV |
+|---------|----------|--------------|-----------|----------|
+| Lang Lang | 127.4 s | **−15.4%** fastest | 4.4% | 0.192 |
+| Li Yundi | 187.2 s | +24.4% | 1.4% | **0.286** most rubato |
+| Shen Wenyu | 201.9 s | **+34.2%** slowest | **13.3%** | 0.225 |
+
+*ForteRatio = fraction of frames where normalized RMS > 0.6 (device-independent).*
+
+- **Lang Lang** plays 15% faster than written tempo; his "energetic" impression comes from pace and note density, not sustained forte volume.
+- **Li Yundi** has the highest rhythmic freedom (IOI CV = 0.286, nearly 3× Lang Lang's) and consistently lightest dynamics.
+- **Shen Wenyu** takes 34% longer than score, with the highest relative dynamic intensity despite a lower-volume home recording setup.
+
+---
+
+### 2. Section-by-Section Analysis
+
+Section boundaries derived from MIDI structure: largest rest gap at 76.84 s (2.1 s pause), followed by a 3× jump in note density (华彩 cadenza onset).
+
+| Section | Span (score) | Character |
+|---------|-------------|-----------|
+| A段 主题 | 0 – 60.8 s | Main theme |
+| B段 抒情 | 60.8 – 76.8 s | Lyrical interlude |
+| 华彩 | 76.8 – 130.0 s | Cadenza / virtuoso section |
+| 尾声 | 130.0 – 151.6 s | Coda |
+
+**ForteRatio by section (device-independent):**
+
+| Section | Lang Lang | Li Yundi | Shen Wenyu |
+|---------|-----------|----------|-----------|
+| A段 主题 | 0.9% | 0.0% | 5.7% |
+| B段 抒情 | 2.8% | 0.0% | 8.2% |
+| **华彩** | **10.8%** | **3.9%** | **28.8%** |
+| 尾声 | 0.0% | 0.0% | 0.0% |
+
+**Key findings:**
+- The **华彩 cadenza is where the three performers diverge most sharply**. Shen Wenyu's forte ratio (28.8%) is 7.4× Li Yundi's (3.9%) — dramatically different approaches to the same virtuoso passage.
+- **Lang Lang's timing CV is locked near 0.17 across all four sections** — a remarkable metronome-like rhythmic stability that does not change with musical context.
+- **Li Yundi's 尾声 is nearly silent** (ForteRatio ≈ 1.2%), fading to a whisper; Lang Lang's ending retains moderate energy (12.0%).
+
+---
+
+### 3. Note-Level Agogic Deviation
+
+DTW alignment between MIDI score onsets (936 unique times) and audio-detected performer onsets, after normalizing both sequences to the same time axis (removing global tempo difference). Agogic deviation = actual performer onset − expected onset under uniform tempo (ms; negative = ahead of beat, positive = behind).
+
+**Mean ± Std deviation (ms) per section:**
+
+| Section | Lang Lang | Li Yundi | Shen Wenyu |
+|---------|-----------|----------|-----------|
+| A段 主题 | −9 ± 110 | −20 ± 164 | **−45** ± 124 |
+| B段 抒情 | −5 ± **89** | −17 ± **89** | −6 ± 99 |
+| 华彩 | −6 ± 109 | −6 ± 137 | −14 ± 107 |
+| 尾声 | −30 ± 146 | −24 ± **470** | −38 ± 155 |
+
+**Key findings:**
+- **B段 (lyrical interlude) is the most metronomic section** for all three performers — smallest standard deviation (89–99 ms), suggesting the melody here is played more strictly in time.
+- **Li Yundi's 尾声 has extreme tempo freedom** (std = 470 ms), confirming his ending is highly improvisatory and free.
+- **All performers show a slight negative bias** (rushing ahead of expected beat) throughout, meaning none of the three plays mechanically behind the beat.
+- **Shen Wenyu rushes most in the opening A段** (mean = −45 ms), suggesting an impulsive or forward-leaning approach to the theme.
+
+---
+
+### 4. Dynamics Paradox — Why Device-Independent Normalization Matters
+
+| Pianist | Absolute Peak RMS | 华彩 ForteRatio (raw) | 华彩 ForteRatio (normalized) |
+|---------|------------------|----------------------|------------------------------|
+| Lang Lang | 0.165 | — | 10.8% |
+| Li Yundi | **0.229** highest | — | 3.9% |
+| Shen Wenyu | **0.120** lowest | — | **28.8%** |
+
+At face value, Shen Wenyu's home recording is the quietest (peak RMS only 54% of Li Yundi's studio level). A naive loudness comparison would rank him last. After noise-subtracted peak-normalization, his 华彩 ForteRatio (28.8%) is the highest — 7.4× Li Yundi's (3.9%). His dynamic contrast is the most extreme of the three, regardless of recording setup.
+
+---
+
+### 5. MFCC Timbral Classification
+
+All 13 MFCC timbral dimensions differ significantly between performers (Bonferroni-corrected α = 0.05/13 = 0.0038). Each performer maintains their acoustic fingerprint throughout the full piece (temporal self-consistency Pearson r > 0.98).
+
+| Comparison | Significantly Different Dims | Avg Cohen's d |
+|-----------|------------------------------|---------------|
+| Lang Lang vs Li Yundi | 12/13 | 0.158 (small) |
+| Lang Lang vs Shen Wenyu | 13/13 | 0.593 (medium) |
+| Li Yundi vs Shen Wenyu | 13/13 | 0.684 (medium) |
+
+Shen Wenyu is acoustically most distinct from the other two.
+
+---
+
+## Performer Character Profiles
+
+**郎朗 (Lang Lang) — Driving and Consistent**
+- Fastest tempo; rhythmic stability locked at CV ≈ 0.17 in every section
+- Moderate dynamics (ForteRatio 4.4% global, 10.8% in 华彩)
+- The "energetic" impression is from pace and note density, not peak volume
+
+**李云迪 (Li Yundi) — Lyrical and Free**
+- Highest rhythmic freedom (IOI CV = 0.286) and most elastic phrasing
+- Lightest dynamics throughout; 华彩 ForteRatio only 3.9%
+- Ending (尾声) is the most improvisatory of the three (std = 470 ms)
+
+**沈文裕 (Shen Wenyu) — Deliberate and Contrasting**
+- Slowest overall pace; rushes ahead most in the opening A段 (mean −45 ms)
+- Most extreme dynamic range in the cadenza (华彩 ForteRatio 28.8%)
+- Despite the quietest recording environment, his musical dynamic effort is the greatest
+
+---
 
 ## Project Structure
 
@@ -52,30 +160,30 @@ The Wang Jianzhong arrangement MIDI (`cai-yun-zhui-yue-ren-guang-qu-wang-jian-zh
 Sound project/
 ├── README.md
 ├── .gitignore
-├── 62a57402e5a6c.pdf                                    # Official score (Wang Jianzhong 1975)
-├── cai-yun-zhui-yue-ren-guang-qu-wang-jian-zhong-gai-bian.mid  # Real MIDI from OMR
+├── requirements.txt
+├── 62a57402e5a6c.pdf                        # Official score (Wang Jianzhong 1975)
+├── cai-yun-zhui-yue-ren-guang-qu-...mid    # Real MIDI from OMR
 │
-├── SCORE COMPARISON
-├── score_vs_performers.py                               # Score vs performers analysis (main)
-├── synthesize_reference.py                              # MIDI → WAV synthesis
+├── SCORE REFERENCE
+├── synthesize_reference.py                  # MIDI → WAV synthesis
+├── reference_score.wav                      # Synthesized score (git-ignored)
 │
-├── ANALYSIS PIPELINES
-├── ultimate_pipeline.py                                 # Comprehensive statistical analysis
-├── enhanced_pipeline.py                                 # Extended feature extraction (15+ dimensions)
-├── expressive_style_pipeline.py                         # 9-dimensional expressive style analysis
-├── music_analysis_pipeline.py                           # Initial analysis pipeline
+├── MAIN ANALYSIS SCRIPTS
+├── score_vs_performers.py                   # Global score vs performer comparison
+├── section_analysis.py                      # Section-by-section (A段/B段/华彩/尾声)
+├── note_alignment.py                        # Note-level agogic deviation via DTW
+├── dynamics_paradox.py                      # Dynamics paradox visualization (Direction C)
+├── ultimate_pipeline.py                     # MFCC / statistical classification
+├── enhanced_pipeline.py                     # Extended feature extraction (15+ dims)
+├── expressive_style_pipeline.py             # 9-dimensional expressive analysis
+├── music_analysis_pipeline.py               # Initial MFCC/DTW analysis
 │
 ├── AUDIO NORMALIZATION
-├── audio_normalization.py                               # Normalize audio files
-├── comparative_analysis_normalized.py                   # Fair comparison of normalized audio
-├── normalized_audio/                                    # Standardized audio files (WAV, git-ignored)
+├── audio_normalization.py                   # Normalize audio files
+├── normalized_audio/                        # Processed audio (WAV, git-ignored)
 │   ├── normalized_langlang_caiyun.wav
 │   ├── normalized_liyundi_caiyun.wav
 │   └── normalized_shenwenyu_caiyun.wav
-│
-├── UTILITIES
-├── convert_audio.py                                     # Audio format conversion
-├── verify_audio.py                                      # Audio verification
 │
 ├── RESULTS
 ├── results_ultimate/
@@ -85,227 +193,114 @@ Sound project/
 │   │   ├── 07_effect_size_heatmap.png
 │   │   ├── 08_hierarchical_dendrogram.png
 │   │   ├── 11_temporal_vs_standard.png
-│   │   ├── 12_score_vs_performers_curves.png            # RMS & ZCR time-series
-│   │   └── 13_score_deviation_bars.png                  # Score deviation bar chart
-│   ├── score_vs_performers.csv                          # Key metrics table
-│   ├── tukey_posthoc_results.csv
-│   ├── temporal_analysis.csv
-│   ├── style_consistency.csv
-│   └── ULTIMATE_ANALYSIS_REPORT.txt
+│   │   ├── 12_score_vs_performers_curves.png
+│   │   ├── 13_score_deviation_bars.png
+│   │   ├── 14_section_comparison.png        # Section ForteRatio grouped bar
+│   │   ├── 15_section_profiles.png          # Radar charts per section
+│   │   ├── 16_section_rubato_dynamics.png   # Timing CV + dynamics scatter
+│   │   ├── 17_agogic_deviation.png          # Note-level deviation over time
+│   │   ├── 18_agogic_overlay.png            # Three performers overlaid
+│   │   ├── 19_agogic_boxplot.png            # Box plots per section
+│   │   └── 20_dynamics_paradox.png          # Raw vs normalised dynamics
+│   ├── note_alignment.csv
+│   ├── section_analysis.csv
+│   └── score_vs_performers.csv
 │
 ├── results_enhanced/
-│   ├── plots/
-│   │   ├── 01_kfold_cv.png
-│   │   ├── 02_anova_significance.png
-│   │   ├── 03_train_vs_test.png
-│   │   └── 04_feature_heatmap.png
-│   └── feature_statistics.csv
+│   └── plots/ (01–04)
 │
-├── results_expressive_style/
-│   ├── plots/
-│   │   ├── 09_expressive_style_radar.png
-│   │   └── 10_dimensions_comparison.png
-│   ├── expressive_style_9dimensions.csv
-│   └── EXPRESSIVE_STYLE_REPORT.txt
-│
-└── results/                                             # Initial analysis
-    ├── plots/ (01–07)
-    ├── style_differences.csv
-    ├── classification_accuracy.csv
-    ├── confusion_matrix.csv
-    └── analysis_report.txt
+└── results_expressive_style/
+    └── plots/ (09–10)
 ```
+
+---
 
 ## Quick Start
 
-### Requirements
 ```bash
 pip install -r requirements.txt
-```
 
-### Score vs Performers Analysis (New)
-```bash
-# Generate reference WAV from the real MIDI
+# Score baseline vs performers
 python synthesize_reference.py
-
-# Run score baseline comparison
 python score_vs_performers.py
-```
 
-### Full Analysis Pipelines
-```bash
-# Comprehensive statistical analysis
+# Section-by-section analysis
+python section_analysis.py
+
+# Note-level agogic deviation
+python note_alignment.py
+
+# Dynamics paradox visualization
+python dynamics_paradox.py
+
+# Statistical classification
 python ultimate_pipeline.py
-
-# 9-dimensional expressive style
-python expressive_style_pipeline.py
-
-# Extended feature extraction + SVM
 python enhanced_pipeline.py
-
-# Initial MFCC/DTW analysis
-python music_analysis_pipeline.py
 ```
 
-## Key Findings
+---
 
-### Score vs Performers — Pace and Dynamics Comparison
+## Selected Visualizations
 
-Score baseline: **150.5 s, 114 BPM, Timing CV = 0.000** (mechanical)
+### Dynamics Paradox
+![Dynamics Paradox](results_ultimate/plots/20_dynamics_paradox.png)
 
-| Pianist | Duration | Pace vs Score | MeanIntens | ForteRatio | DynCV | TimingCV |
-|---------|----------|--------------|-----------|-----------|-------|----------|
-| Lang Lang | 127.4s | **−15.4%** (fastest) | 0.198 | 4.4% | 1.015 | 0.192 |
-| Li Yundi | 187.2s | +24.4% | 0.151 | 1.4% | 1.007 | **0.286** (most rubato) |
-| Shen Wenyu | 201.9s | **+34.2%** (slowest) | **0.335** | **13.3%** | 0.644 | 0.225 |
+Raw RMS vs device-independent normalized RMS across sections. Shows why Shen Wenyu's home recording looks quietest but has the most extreme dynamic contrast.
 
-*MeanIntens, ForteRatio, DynCV computed after noise-floor subtraction and peak-normalization — device-independent.*
+### Note-Level Agogic Deviation
+![Agogic Deviation](results_ultimate/plots/17_agogic_deviation.png)
 
-**Pace**: Lang Lang plays 15% faster than score tempo; Shen Wenyu takes 34% longer.
+Per-note timing deviation (ms) from expected beat across the full piece, smoothed over 15 notes, coloured by section.
 
-**Dynamics (device-independent)**: After debiasing each recording against its own noise floor and peak, Shen Wenyu spends the most time in the upper dynamic range (ForteRatio 13.3% — frames exceeding 60% of peak), while Li Yundi plays most gently (1.4%). Lang Lang's "loud" impression correlates with his faster tempo and higher note density rather than sustained forte dynamics.
+![Agogic Overlay](results_ultimate/plots/18_agogic_overlay.png)
 
-**Rubato**: Li Yundi shows the most timing flexibility (IOI CV = 0.286), nearly three times the score's mechanical zero. Lang Lang's faster tempo is achieved through uniformly shorter note values, not rubato compression.
+All three performers overlaid — B段 is the most metronomic; Li Yundi's 尾声 deviates most.
 
-### Expressive Character Profiles
+### Section Comparison
+![Section Comparison](results_ultimate/plots/14_section_comparison.png)
 
-**郎朗 (Lang Lang) — Driving and Energetic**
-- Fastest tempo (127.4s — 15% faster than score, 37% faster than Shen Wenyu)
-- Moderate dynamic effort (ForteRatio 4.4%), moderate timing flexibility (CV = 0.192)
-- High onset density — the "energy" impression comes from pace and note density, not peak loudness
-
-**李云迪 (Li Yundi) — Expressive and Flexible**
-- Moderate pace (+24.4% from score), gentlest dynamics (ForteRatio 1.4%)
-- Highest rubato (IOI CV = 0.286) — maximum artistic rhythmic freedom
-- The "gentle" quality is real: consistently lighter dynamics with the most elastic phrasing
-
-**沈文裕 (Shen Wenyu) — Deliberate and Full-Range**
-- Slowest tempo (+34.2% from score), highest relative dynamic intensity (ForteRatio 13.3%)
-- Moderate rubato (CV = 0.225), lowest DynCV (0.644) — steady high-intensity playing
-- Despite quieter absolute recording level (home setup), the dynamic effort within his range is the greatest of the three
-
-### MFCC / Timbral Classification
-
-All 13 MFCC timbral dimensions differ significantly between performers (Bonferroni-corrected α = 0.0038). The SVM classifier achieves **99.98% training accuracy** on this 3-performer dataset. Temporal self-consistency (Pearson r > 0.98) confirms each performer maintains their character throughout the entire piece.
-
-| Comparison | Significantly Different Dims | Avg Cohen's d | Effect |
-|-----------|------------------------------|---------------|--------|
-| Lang Lang vs Li Yundi | 12/39 | 0.158 | Small |
-| Lang Lang vs Shen Wenyu | 13/39 | 0.593 | Medium |
-| Li Yundi vs Shen Wenyu | 13/39 | 0.684 | Medium |
-
-Shen Wenyu is acoustically most distinct from the other two.
-
-## Technical Details
-
-### Methodology Notes
-
-**Why spectral centroid is excluded from cross-recording comparison**: Spectral centroid depends on the piano model, microphone placement, and recording chain — not solely on the performer's interpretation. It is not used in the score vs performers metrics.
-
-**Device-independent dynamics**: The two-step debiasing (subtract noise floor, then peak-normalize) removes microphone-noise bias and recording-gain differences. What remains reflects relative dynamic effort within each recording — how much of their available dynamic range each performer actually uses.
-
-**Score timing CV**: The MIDI baseline has CV = 0 by definition (mechanical playback). IOI-based BPM estimation on synthesized audio was discarded because onset detection on complex piano textures includes ornaments and inner voices, inflating apparent BPM above the actual score tempo.
-
-**Bonferroni correction**: 13 simultaneous ANOVA tests on MFCC dimensions → family-wise error rate controlled at α = 0.05/13 = 0.0038.
-
-**Agogic accent threshold**: IQR-based (Q3 + 0.5 × IQR) replacing an arbitrary 110% threshold, adapting to each performer's own IOI distribution.
-
-**Vibrato model**: For piano, vibrato is modeled as amplitude modulation (RMS envelope periodicity), not frequency modulation.
-
-**DTW normalization**: DTW distances normalized by path length for fair comparison across recordings of different durations.
-
-### Audio Features Extracted
-- **MFCC** (Mel-Frequency Cepstral Coefficients): 13 dimensions
-- **RMS Envelope**: Noise-subtracted, peak-normalized for cross-recording dynamics
-- **Zero Crossing Rate**: Noise-floor-corrected, used as articulation proxy
-- **Onset Detection**: Inter-onset intervals → timing CV (rubato), onset density
-- **Expressive Dimensions**: Rubato, Vibrato (AM), Attack, Sustain, Agogic Accents
-
-### Statistical Methods
-- One-way ANOVA with Bonferroni correction (α = 0.05/13 = 0.0038)
-- Tukey HSD post-hoc pairwise comparisons
-- Effect size metrics (eta-squared η², Cohen's d)
-- K-fold cross-validation (5-fold stratified)
-- Permutation-based feature importance (SVM)
-- Hierarchical clustering + K-means
-
-## Visualizations
+Side-by-side section dynamics and timing. 华彩 shows the widest divergence across performers.
 
 ### Score vs Performers
+![Score Curves](results_ultimate/plots/12_score_vs_performers_curves.png)
 
-#### Time-Series Comparison
-![Score vs Performers Curves](results_ultimate/plots/12_score_vs_performers_curves.png)
+Normalized RMS and ZCR envelopes for all performers alongside the score reference.
 
-Normalized RMS envelope and ZCR curves for each performer alongside the score reference. Shows dynamic shape and articulation density across the full performance.
+---
 
-#### Score Deviation Bar Chart
-![Score Deviation Bars](results_ultimate/plots/13_score_deviation_bars.png)
+## Methodology Notes
 
-Bar chart showing each performer's deviation from the score baseline across pace, dynamics, and timing dimensions.
+**Section boundaries**: Derived from MIDI structure (largest rest gap + note density jump) rather than manual annotation, making the segmentation reproducible.
 
-### Expressive Style
+**DTW alignment**: Score onset times (from MIDI) and performer onset times (from audio) are both normalized to the same time axis before DTW, removing global tempo differences. The warp path maps each score note to its closest performed onset, enabling per-note deviation computation.
 
-![Expressive Style Radar Charts](results_expressive_style/plots/09_expressive_style_radar.png)
+**Device-independent dynamics**: Noise-subtracted peak-normalization removes both microphone noise bias and recording gain. Comparisons reflect dynamic effort within each recording's own range, not absolute SPL.
 
-Polar radar charts showing the 9-dimensional expressive profile of each pianist, normalized 0–1 for fair comparison.
+**Spectral centroid excluded**: Depends on piano model, mic placement, and recording chain — not solely on performer interpretation.
 
-![Dimensions Comparison Grid](results_expressive_style/plots/10_dimensions_comparison.png)
+**Bonferroni correction**: 13 simultaneous ANOVA tests on MFCC → α = 0.05/13 = 0.0038.
 
-3×3 grid comparing all three pianists across nine dimensions.
-
-### Statistical Analysis
-
-![Effect Size Heatmap](results_ultimate/plots/07_effect_size_heatmap.png)
-
-Eta-squared effect sizes (η²) for all 13 MFCC dimensions. MFCC2 shows maximum effect (η² = 0.4763).
-
-![Hierarchical Dendrogram](results_ultimate/plots/08_hierarchical_dendrogram.png)
-
-Hierarchical clustering dendrogram of MFCC features.
-
-![Clustering Visualization](results_ultimate/plots/06_clustering_visualization.png)
-
-K-means clustering (k=3) of temporal frames showing acoustic distinctiveness.
-
-![Temporal Evolution](results_ultimate/plots/05_temporal_evolution.png)
-
-Time-series RMS energy showing dynamic evolution throughout each performance.
-
-### Classification
-
-![K-Fold CV Performance](results_enhanced/plots/01_kfold_cv.png)
-
-5-fold cross-validation results. High within-dataset accuracy confirms acoustically distinct fingerprints.
-
-![ANOVA Significance](results_enhanced/plots/02_anova_significance.png)
-
-p-values for all extracted features under ANOVA.
+---
 
 ## Conclusions
 
-### Perceptual-Acoustic Correspondence
+Three distinct and internally consistent performance styles emerge across all analysis layers:
 
-This study bridges **subjective listening perception** with **objective acoustic measurement**. Three distinct performance characters emerge consistently across all analysis methods:
+**Lang Lang** plays the fastest tempo with near-perfect rhythmic regularity (timing CV ≈ 0.17 in every section). His expressive energy is conveyed through pace and note density rather than dynamic extremes.
 
-**郎朗 (Lang Lang) — Driving and Energetic**: Fastest tempo at 15% above score, moderate dynamic effort. The "powerful" impression comes from pace and note density rather than sustained forte playing.
+**Li Yundi** has the most elastic phrasing (IOI CV = 0.286) and the lightest dynamics throughout. His 华彩 is restrained (ForteRatio 3.9%), and his ending fades to near-silence with high tempo freedom (std = 470 ms).
 
-**李云迪 (Li Yundi) — Lyrical and Expressive**: Most rhythmic freedom (IOI CV = 0.286 — nearly 3× Lang Lang's), lightest dynamics. The most elastic, "breathing" phrasing of the three.
+**Shen Wenyu** shows the widest dynamic range in the cadenza (华彩 ForteRatio 28.8%) — a finding invisible without device-independent normalization. He rushes ahead most in the opening, plays the most deliberately overall, and produces the most extreme forte–piano contrasts.
 
-**沈文裕 (Shen Wenyu) — Deliberate and Full-Range**: 34% slower than score, highest relative dynamic intensity (ForteRatio 13.3%), most sustained high-energy playing despite a quieter home recording setup.
-
-### Research Value
-
-This framework demonstrates that acoustic features can **quantify what listeners intuitively perceive**, enabling:
-
-- **Music education**: Express "play with more flexibility" as a concrete target (e.g., raise timing CV toward Li Yundi's 0.286)
-- **Performance scholarship**: Provide objective evidence alongside critical interpretation, making style claims reproducible
-- **Musicology**: Systematically compare how performers interpret the same work
+The 华彩 (cadenza) section is the strongest discriminant between the three styles, with ForteRatio differing by a factor of 7.4× between Li Yundi and Shen Wenyu. The B段 (lyrical interlude) is where all three converge most closely in timing regularity.
 
 ### Limitations
 
-- Only one piece per performer is available; temporal self-consistency measures within a single recording, not cross-piece generalization
-- Recording conditions differ (studio vs home); the noise-subtraction debiasing mitigates but does not fully eliminate equipment effects
-- Acoustic features capture *what* is happening acoustically but not *why* — differences in dynamics or timing may reflect technique, instrument, musical philosophy, or score edition
+- Single piece per performer; findings characterise this recording, not the performers' complete artistic identity
+- Recording conditions differ (studio vs home vs live); debiasing mitigates but cannot fully eliminate equipment effects
+- Acoustic features capture *what* happens but not *why* — differences may reflect technique, instrument, musical philosophy, or score edition
+
+---
 
 ## License
 
@@ -319,6 +314,4 @@ Wenli
 
 - Performances by Lang Lang, Li Yundi, and Shen Wenyu
 - Wang Jianzhong piano arrangement (1975)
-- librosa for audio feature extraction
-- scikit-learn for machine learning
-- scipy for statistical analysis
+- librosa · scikit-learn · scipy · fastdtw
