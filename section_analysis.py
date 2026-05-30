@@ -40,6 +40,12 @@ SECTIONS = [
     ('尾声',       130.0,  151.6),
 ]
 SECTION_NAMES = [s[0] for s in SECTIONS]
+SEC_DISPLAY = {
+    'A段\n主题':  'A段 主题\n(Theme A)',
+    'B段\n抒情':  'B段 抒情\n(Lyrical)',
+    '华彩\n技巧': '华彩\n(Cadenza)',
+    '尾声':       '尾声\n(Coda)',
+}
 
 # ── Performers ───────────────────────────────────────────────────────────────
 PERFORMERS = {
@@ -195,7 +201,7 @@ for mi, (ax, (metric_key, metric_label, as_pct)) in enumerate(zip(axes, METRICS)
                       color=color, alpha=0.85, edgecolor='white', linewidth=0.5)
 
     ax.set_xticks(x)
-    ax.set_xticklabels([s[0].replace('\n', ' ') for s in SECTIONS], fontsize=10)
+    ax.set_xticklabels([SEC_DISPLAY.get(s[0], s[0]) for s in SECTIONS], fontsize=9)
     ax.set_ylabel(metric_label, fontsize=10)
     ax.legend(fontsize=8)
     ax.grid(True, alpha=0.25, axis='y')
@@ -237,9 +243,9 @@ for ri, name in enumerate(PERF_NAMES):
         ax.barh(metric_labels_short, vals_norm, color=color, alpha=0.75)
         ax.set_xlim(0, 1)
         ax.set_xlabel('Normalised', fontsize=7)
-        title = sec_name.replace('\n', ' ')
+        title = SEC_DISPLAY.get(sec_name, sec_name.replace('\n', ' '))
         if ri == 0:
-            ax.set_title(title, fontsize=10, fontweight='bold')
+            ax.set_title(title, fontsize=9, fontweight='bold')
         if ci == 0:
             ax.set_ylabel(name, fontsize=10, fontweight='bold', color=color)
         ax.tick_params(axis='both', labelsize=7)
@@ -256,7 +262,7 @@ print(f"Saved: {p2}")
 # ── Plot 3: Timing CV and Forte Ratio side-by-side across sections ───────────
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5))
 
-sec_labels = [s[0].replace('\n', ' ') for s in SECTIONS]
+sec_labels = [SEC_DISPLAY.get(s[0], s[0]) for s in SECTIONS]
 
 for name, color in zip(PERF_NAMES, COLORS):
     cvs    = [results[name]['sections'].get(s[0], {}).get('timing_cv', 0)    for s in SECTIONS]
