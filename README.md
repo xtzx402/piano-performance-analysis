@@ -88,7 +88,19 @@ The expanded dataset reveals an even more striking case: **殷承宗 Yin Chengzo
 
 ### Finding 4 — Macro Stability, Micro Freedom (Universal Pattern)
 
-Despite widely different styles, **all nine performers share one structural property**: tempo is consistent within each performer's reading across sections. No performer uses section-level tempo changes as an expressive tool. Instead, all musical expression occurs at the **note level**: per-note agogic deviations, concentrated especially in the coda (尾声).
+The nine performers choose **very different global tempos** — from Lang Lang's 135 BPM down to Niemczuk's 74 BPM. But despite this wide spread, all nine share one structural property: **each performer's chosen tempo stays flat across all four sections of the piece**. No performer accelerates into the cadenza or slows down for the coda at the section level.
+
+| Performer | A段 主题 | B段 抒情 | 华彩 | 尾声 |
+|-----------|---------|---------|------|------|
+| Lang Lang | 135 BPM | 135 | 135 | 135 |
+| Li Yundi | 92 | 92 | 92 | 92 |
+| Shen Wenyu | 85 | 85 | 85 | 86 |
+| Yin Chengzong | 101 | 101 | 101 | 102 |
+| Niemczuk | 80 | 79 | 80 | 80 |
+
+In other words: each performer locks in a personal tempo at the start and holds it. The rows differ dramatically (127s vs 222s total duration); what is flat is *within* each row. No performer uses section-level tempo as an expressive lever.
+
+Instead, all musical expression occurs at the **note level**: per-note agogic deviations of 60–470 ms relative to the expected beat, concentrated especially in the coda (尾声). The piece's architecture is kept metrically stable; the expressive shaping happens note-by-note.
 
 Tempo clusters clearly into three groups:
 - **Fast**: Lang Lang (~135 BPM)
@@ -288,7 +300,7 @@ Per-note timing deviation from expected beat. The lyrical interlude (B段) is th
 ### Local BPM
 ![Local BPM](results_ultimate/plots/21_local_bpm_curves.png)
 
-All nine performers maintain consistent tempo within their own reading throughout the piece. Expression is at the note level, not the architectural level.
+Each performer's chosen tempo stays flat across all four sections — the rows in the table above are nearly constant within each performer, even though the rows differ dramatically from each other (Lang Lang at 135 BPM vs Niemczuk at 74 BPM). No one uses section-level tempo changes as an expressive device. Expression happens at the note level, not the architectural level.
 
 ### Section Comparison
 ![Section Comparison](results_ultimate/plots/14_section_comparison.png)
