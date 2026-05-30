@@ -62,13 +62,5 @@
     "year": null,
     "source_url": "https://www.youtube.com/watch?v=xOy3K_VYPKM",
     "notes": ""
-  },
-  "Live (Anon)": {
-    "file": "normalized_live_(anon)_caiyun.wav",
-    "color": "#F1C40F",
-    "recording_type": "Live",
-    "year": null,
-    "source_url": "https://www.youtube.com/watch?v=Cqb2RpsZ1PA",
-    "notes": "0.5s leading silence trimmed"
   }
 }
