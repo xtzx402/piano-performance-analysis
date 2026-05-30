@@ -1,0 +1,23 @@
+{
+  "Lang Lang": {
+    "file": "normalized_langlang_caiyun.wav",
+    "color": "#E74C3C",
+    "recording_type": "Live stage",
+    "year": null,
+    "notes": "Live stage performance"
+  },
+  "Li Yundi": {
+    "file": "normalized_liyundi_caiyun.wav",
+    "color": "#F39C12",
+    "recording_type": "Studio",
+    "year": null,
+    "notes": "Studio recording"
+  },
+  "Shen Wenyu": {
+    "file": "normalized_shenwenyu_caiyun.wav",
+    "color": "#3498DB",
+    "recording_type": "Home",
+    "year": null,
+    "notes": "Home recording; 7.4s pre-music noise trimmed"
+  }
+}
