@@ -39,6 +39,12 @@ SECTIONS = [
     ('华彩',      76.8,  130.0,  '#F9E79F'),
     ('尾声',     130.0,  151.6,  '#F5CBA7'),
 ]
+SEC_EN = {
+    'A段 主题': 'A段 主题\n(Theme A)',
+    'B段 抒情': 'B段 抒情\n(Lyrical)',
+    '华彩':     '华彩\n(Cadenza)',
+    '尾声':     '尾声\n(Coda)',
+}
 
 PERFORMERS = {
     'Lang Lang':  (base / 'normalized_audio' / 'normalized_langlang_caiyun.wav',  '#E74C3C'),
@@ -134,7 +140,7 @@ for name, d in data.items():
 yhi = ax_raw.get_ylim()[1]
 for sec_name, start, end, _ in SECTIONS:
     ax_raw.text((start+end)/2, yhi * 0.92,
-                sec_name, ha='center', va='top', fontsize=8.5,
+                SEC_EN.get(sec_name, sec_name), ha='center', va='top', fontsize=8.5,
                 color='#444', fontweight='bold')
 
 ax_raw.set_xlim(0, 156)
@@ -172,7 +178,7 @@ ax_norm.set_xlabel('Score Time (s)', fontsize=9)
 yhi_n = ax_norm.get_ylim()[1]
 for sec_name, start, end, _ in SECTIONS:
     ax_norm.text((start+end)/2, yhi_n * 0.92,
-                 sec_name, ha='center', va='top', fontsize=8.5,
+                 SEC_EN.get(sec_name, sec_name), ha='center', va='top', fontsize=8.5,
                  color='#444', fontweight='bold')
 
 # ── Panel 3: Per-section raw peak RMS bar chart ───────────────────────────────
@@ -189,9 +195,9 @@ for i, (name, col) in enumerate(zip(performers, colors)):
                         edgecolor='white', linewidth=0.5)
 
 ax_bar_r.set_xticks(x)
-ax_bar_r.set_xticklabels([s.replace(' ', '\n') for s in sec_names], fontsize=9)
+ax_bar_r.set_xticklabels([SEC_EN.get(s, s) for s in sec_names], fontsize=8)
 ax_bar_r.set_ylabel('Peak RMS (raw)', fontsize=9)
-ax_bar_r.set_title('③ 各段峰值 RMS（原始）\nShen Wenyu lowest raw amplitude',
+ax_bar_r.set_title('③ Peak RMS per Section (Raw) / 各段峰值 RMS（原始）\nShen Wenyu lowest raw amplitude',
                    fontsize=10, fontweight='bold')
 ax_bar_r.legend(fontsize=9)
 ax_bar_r.grid(True, alpha=0.2, axis='y')
@@ -205,17 +211,17 @@ for i, (name, col) in enumerate(zip(performers, colors)):
                  edgecolor='white', linewidth=0.5)
 
 # Highlight 华彩 with a box
-ax_bar_f.axvspan(1.5, 2.5, color='gold', alpha=0.15, zorder=0, label='华彩 highlight')
+ax_bar_f.axvspan(1.5, 2.5, color='gold', alpha=0.15, zorder=0, label='华彩 (Cadenza) highlight')
 
 ax_bar_f.set_xticks(x)
-ax_bar_f.set_xticklabels([s.replace(' ', '\n') for s in sec_names], fontsize=9)
+ax_bar_f.set_xticklabels([SEC_EN.get(s, s) for s in sec_names], fontsize=8)
 ax_bar_f.set_ylabel('Forte Ratio (%)\n[norm. RMS > 0.6]', fontsize=9)
-ax_bar_f.set_title('④ 归一化后强音比例 (ForteRatio)\nShen Wenyu highest in 华彩',
+ax_bar_f.set_title('④ ForteRatio after Normalisation / 归一化后强音比例\nShen Wenyu highest in 华彩 (Cadenza)',
                    fontsize=10, fontweight='bold')
 ax_bar_f.legend(fontsize=9)
 ax_bar_f.grid(True, alpha=0.2, axis='y')
 
-fig.suptitle('动态对比悖论：家庭录制 ≠ 弱演奏\n'
+fig.suptitle('The Dynamics Paradox / 动态对比悖论：家庭录制 ≠ 弱演奏\n'
              'The Dynamics Paradox — Shen Wenyu\'s home recording is acoustically quietest,\n'
              'yet reveals the most dramatic forte contrasts after device-independent normalisation',
              fontsize=12, fontweight='bold', y=0.98)

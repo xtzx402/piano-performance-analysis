@@ -266,12 +266,12 @@ for name, color in zip(PERF_NAMES, COLORS):
     ax2.plot(sec_labels, fortes, marker='s', color=color, linewidth=2.5,
              markersize=8, label=name)
 
-ax1.set_title('Rubato (IOI Timing CV) 各段落变化', fontsize=11, fontweight='bold')
-ax1.set_ylabel('Timing CV  (越高越自由)')
+ax1.set_title('Rubato (IOI Timing CV) per Section / 各段落节奏自由度', fontsize=11, fontweight='bold')
+ax1.set_ylabel('Timing CV  (higher = more flexible / 越高越自由)')
 ax1.legend(); ax1.grid(True, alpha=0.3)
 
-ax2.set_title('强奏比例 (Forte Ratio) 各段落变化', fontsize=11, fontweight='bold')
-ax2.set_ylabel('Forte Ratio  (越高越大声)')
+ax2.set_title('Forte Ratio per Section / 各段落强奏比例', fontsize=11, fontweight='bold')
+ax2.set_ylabel('Forte Ratio  (higher = louder / 越高越大声)')
 ax2.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f'{v:.0%}'))
 ax2.legend(); ax2.grid(True, alpha=0.3)
 

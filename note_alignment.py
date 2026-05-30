@@ -46,6 +46,12 @@ SECTIONS = [
     ('华彩',     76.8,  130.0,  '#F9E79F'),
     ('尾声',    130.0,  151.6,  '#F5CBA7'),
 ]
+SEC_EN = {
+    'A段 主题': 'A段 主题\n(Theme A)',
+    'B段 抒情': 'B段 抒情\n(Lyrical)',
+    '华彩':     '华彩\n(Cadenza)',
+    '尾声':     '尾声\n(Coda)',
+}
 
 PERFORMERS = {
     'Lang Lang':  (base / 'normalized_audio' / 'normalized_langlang_caiyun.wav',  '#E74C3C'),
@@ -245,7 +251,7 @@ for ax, (name, res) in zip(axes, all_results.items()):
         for sec_name, start, end, _ in SECTIONS:
             mid_x = (start + end) / 2
             ax.text(mid_x, ax.get_ylim()[1] * 0.85 if ax.get_ylim()[1] > 0 else 200,
-                    sec_name, ha='center', va='top', fontsize=8,
+                    SEC_EN.get(sec_name, sec_name), ha='center', va='top', fontsize=8,
                     color='#555555', fontweight='bold')
 
 axes[-1].set_xlabel('Score Time (s)', fontsize=10)
@@ -255,11 +261,11 @@ for ax, (name, res) in zip(axes, all_results.items()):
     yhi = ax.get_ylim()[1]
     for sec_name, start, end, _ in SECTIONS:
         ax.text((start+end)/2, yhi * 0.90,
-                sec_name.replace(' ', '\n'), ha='center', va='top',
+                SEC_EN.get(sec_name, sec_name), ha='center', va='top',
                 fontsize=7.5, color='#444', fontweight='bold')
 
-fig.suptitle('逐音符提前/延后量 (Agogic Deviation)\n'
-             '相对于各演奏者整体节奏的时值偏差  |  《彩云追月》',
+fig.suptitle('Agogic Deviation per Note / 逐音符提前·延后量\n'
+             'Deviation from expected beat (ms)  |  《彩云追月》',
              fontsize=13, fontweight='bold')
 plt.tight_layout()
 p_a = out / '17_agogic_deviation.png'
@@ -288,11 +294,11 @@ ax.grid(True, alpha=0.2, axis='y')
 yhi, ylo = ax.get_ylim()
 for sec_name, start, end, _ in SECTIONS:
     ax.text((start+end)/2, yhi - (yhi-ylo)*0.06,
-            sec_name.replace(' ', '\n'), ha='center', va='top',
+            SEC_EN.get(sec_name, sec_name), ha='center', va='top',
             fontsize=8, color='#444', fontweight='bold')
 
-fig.suptitle('三位演奏者逐音符时值偏差叠加对比\n'
-             'Agogic Deviation Overlay — Lang Lang · Li Yundi · Shen Wenyu',
+fig.suptitle('Agogic Deviation Overlay / 三位演奏者逐音符时值偏差叠加对比\n'
+             'Lang Lang · Li Yundi · Shen Wenyu  |  《彩云追月》',
              fontsize=13, fontweight='bold')
 plt.tight_layout()
 p_b = out / '18_agogic_overlay.png'
@@ -321,15 +327,15 @@ for ax, (sec_name, sc_s, sc_e, bg) in zip(axes, SECTIONS):
         patch.set_facecolor(col)
         patch.set_alpha(0.75)
 
-    ax.set_title(sec_name, fontsize=11, fontweight='bold')
+    ax.set_title(SEC_EN.get(sec_name, sec_name), fontsize=10, fontweight='bold')
     ax.set_xticklabels(labels, fontsize=9)
     ax.axhline(0, color='gray', linewidth=0.8, linestyle='--')
     ax.grid(True, alpha=0.2, axis='y')
     if ax == axes[0]:
         ax.set_ylabel('Agogic Deviation (ms)', fontsize=10)
 
-fig.suptitle('各段落时值偏差分布 (Box Plot)\n'
-             'Distribution of Agogic Deviation per Section',
+fig.suptitle('Agogic Deviation Distribution per Section / 各段落时值偏差分布\n'
+             'Box plots — Lang Lang · Li Yundi · Shen Wenyu  |  《彩云追月》',
              fontsize=12, fontweight='bold')
 plt.tight_layout()
 p_c = out / '19_agogic_boxplot.png'
