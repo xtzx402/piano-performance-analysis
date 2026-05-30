@@ -217,6 +217,21 @@ The cadenza (华彩) is the widest point of divergence across all metrics.
 
 ---
 
+## Tech Stack
+
+| Library | Version | Role |
+|---------|---------|------|
+| [librosa](https://librosa.org) | ≥ 0.10 | Audio loading, onset detection, MFCC, RMS, ZCR, onset strength |
+| [fastdtw](https://github.com/slaypni/fastdtw) | ≥ 0.3 | Approximate DTW for score-to-performer onset alignment |
+| [mido](https://mido.readthedocs.io) | ≥ 1.3 | MIDI parsing — tempo map and note event extraction |
+| [numpy](https://numpy.org) | ≥ 1.24 | Numerical computation throughout |
+| [scipy](https://scipy.org) | ≥ 1.11 | `linregress` for decay slope; `uniform_filter1d` for smoothing |
+| [pandas](https://pandas.pydata.org) | ≥ 2.0 | Feature tables and CSV export |
+| [scikit-learn](https://scikit-learn.org) | ≥ 1.3 | SVM classification, K-means clustering, ANOVA, Tukey HSD |
+| [matplotlib](https://matplotlib.org) | ≥ 3.7 | All visualisations (line plots, box plots, radar charts, scatter) |
+
+Python ≥ 3.10 recommended.
+
 ## Quick Start
 
 ```bash
