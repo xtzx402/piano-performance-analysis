@@ -38,31 +38,10 @@ base = Path(__file__).parent
 out  = base / 'results_ultimate' / 'plots'
 out.mkdir(parents=True, exist_ok=True)
 
-SR           = 22050
-HOP          = 512
+from config import PERFORMERS, SECTIONS, SEC_EN, SCORE_DURATION, SR, HOP, SCORE_BPM
+
 DECAY_MS     = 200          # ms to look ahead for decay slope
 DECAY_FRAMES = int(DECAY_MS / 1000 * SR / HOP)   # ≈ 8 frames
-
-SCORE_DURATION = 151.6
-
-SECTIONS = [
-    ('A段 主题',  0.0,   60.8,  '#AED6F1'),
-    ('B段 抒情', 60.8,   76.8,  '#A9DFBF'),
-    ('华彩',     76.8,  130.0,  '#F9E79F'),
-    ('尾声',    130.0,  151.6,  '#F5CBA7'),
-]
-SEC_EN = {
-    'A段 主题': 'A段 主题\n(Theme A)',
-    'B段 抒情': 'B段 抒情\n(Lyrical)',
-    '华彩':     '华彩\n(Cadenza)',
-    '尾声':     '尾声\n(Coda)',
-}
-
-PERFORMERS = {
-    'Lang Lang':  (base / 'normalized_audio' / 'normalized_langlang_caiyun.wav',  '#E74C3C'),
-    'Li Yundi':   (base / 'normalized_audio' / 'normalized_liyundi_caiyun.wav',   '#F39C12'),
-    'Shen Wenyu': (base / 'normalized_audio' / 'normalized_shenwenyu_caiyun.wav', '#3498DB'),
-}
 
 # ── Feature extraction ────────────────────────────────────────────────────────
 print("=" * 65)
@@ -92,6 +71,10 @@ for name, (path, color) in PERFORMERS.items():
                                           pre_avg=3, post_avg=3,
                                           delta=0.15, wait=8)
     onset_times  = librosa.frames_to_time(onset_frames, sr=SR, hop_length=HOP)
+
+    # IOI CV (inter-onset-interval coefficient of variation) — rubato measure
+    ioi = np.diff(onset_times)
+    ioi_cv = float(ioi.std() / ioi.mean()) if len(ioi) > 1 else 0.0
 
     # RMS envelope (for decay computation)
     rms = librosa.feature.rms(y=y, hop_length=HOP)[0]
@@ -142,6 +125,8 @@ for name, (path, color) in PERFORMERS.items():
         'df':          df,
         'color':       color,
         'ratio':       ratio,
+        'global_bpm':  SCORE_BPM / ratio,
+        'ioi_cv':      ioi_cv,
         'env_n':       env_n,
         'forte_ratio': forte_ratio,
         'mean_attack': float(df['attack'].mean()),
@@ -177,7 +162,13 @@ def label_sections(ax):
                 color='#444', fontweight='bold')
 
 # ── Plot A: Attack sharpness curves over score time ───────────────────────────
-fig, axes = plt.subplots(3, 1, figsize=(15, 11), sharex=True)
+_N = len(all_data)
+_NCOLS = 3
+_NROWS = (_N + _NCOLS - 1) // _NCOLS
+fig, _axes_grid = plt.subplots(_NROWS, _NCOLS, figsize=(15, 4 * _NROWS + 1), sharex=True)
+axes = _axes_grid.flatten() if hasattr(_axes_grid, 'flatten') else [_axes_grid]
+for _ax in axes[_N:]:
+    _ax.set_visible(False)
 
 for ax, (name, d) in zip(axes, all_data.items()):
     df    = d['df']
@@ -205,7 +196,8 @@ for ax, (name, d) in zip(axes, all_data.items()):
     ax.legend(fontsize=8, loc='upper right')
     ax.grid(True, alpha=0.2, axis='y')
 
-axes[-1].set_xlabel('Score Time (s)', fontsize=10)
+for _ax in axes[max(0, _N - _NCOLS):_N]:
+    _ax.set_xlabel('Score Time (s)', fontsize=10)
 label_sections(axes[0])
 
 fig.suptitle('Attack Sharpness over Score Time / 逐音符起音锐度\n'
@@ -219,10 +211,9 @@ print(f"\nSaved: {p_a}")
 
 sec_names = [s[0] for s in SECTIONS]
 
-# Global BPM from tempo analysis
-GLOBAL_BPM = {'Lang Lang': 135, 'Li Yundi': 92, 'Shen Wenyu': 85}
-# Timing CV (global, from section analysis)
-TIMING_CV  = {'Lang Lang': 0.175, 'Li Yundi': 0.286, 'Shen Wenyu': 0.225}
+# Global BPM and Timing CV computed from audio (stored during feature extraction above)
+GLOBAL_BPM = {name: d['global_bpm'] for name, d in all_data.items()}
+TIMING_CV  = {name: d['ioi_cv']     for name, d in all_data.items()}
 
 # ── Plot B: Li Yundi Paradox — bubble chart (attack × forte, size = BPM) ─────
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
@@ -269,19 +260,19 @@ for name, d in all_data.items():
 
     ax2.scatter(atk, forte, s=bubble, color=color, alpha=0.85,
                 edgecolors='black', linewidths=1.5, zorder=5)
-    offset = {'Lang Lang': (6, -8), 'Li Yundi': (6, 4), 'Shen Wenyu': (-80, 4)}
-    ax2.annotate(f'{name.split()[0]}\n({bpm} BPM)',
+    ax2.annotate(f'{name.split()[0]}\n({bpm:.0f} BPM)',
                  (atk, forte),
-                 textcoords='offset points', xytext=offset[name],
-                 fontsize=9, fontweight='bold', color=color)
+                 textcoords='offset points', xytext=(6, 4),
+                 fontsize=8, fontweight='bold', color=color)
 
-# Reverb caveat for Lang Lang
-ax2.annotate('* live hall reverb\n  lowers measured attack',
-             xy=(all_data['Lang Lang']['mean_attack'],
-                 all_data['Lang Lang']['forte_ratio'] * 100),
-             xytext=(0.13, 2.0),
-             fontsize=7.5, color='#888', style='italic',
-             arrowprops=dict(arrowstyle='->', color='#aaa', lw=0.8))
+# Reverb caveat for Lang Lang (if present)
+if 'Lang Lang' in all_data:
+    ax2.annotate('* live hall reverb\n  lowers measured attack',
+                 xy=(all_data['Lang Lang']['mean_attack'],
+                     all_data['Lang Lang']['forte_ratio'] * 100),
+                 xytext=(0.13, 2.0),
+                 fontsize=7.5, color='#888', style='italic',
+                 arrowprops=dict(arrowstyle='->', color='#aaa', lw=0.8))
 
 # Quadrant dividers
 xlim = ax2.get_xlim(); ylim = ax2.get_ylim()
@@ -321,8 +312,10 @@ fig, ax = plt.subplots(figsize=(11, 5))
 for i, (name, d) in enumerate(all_data.items()):
     df   = d['df']
     vals = [df[df['section'] == s]['decay_rate'].dropna().mean() for s in sec_names]
+    _NR  = len(all_data)
+    _bw  = min(0.26, 0.8 / _NR)
     x    = np.arange(len(sec_names))
-    ax.bar(x + (i - 1) * 0.26, vals, 0.26,
+    ax.bar(x + (i - (_NR - 1) / 2) * _bw, vals, _bw,
            label=name, color=d['color'], alpha=0.82,
            edgecolor='white', linewidth=0.5)
 
@@ -331,8 +324,8 @@ ax.set_xticks(np.arange(len(sec_names)))
 ax.set_xticklabels([SEC_EN.get(s, s) for s in sec_names], fontsize=9)
 ax.set_ylabel('Mean Decay Rate (RMS/s)\nmore negative = note fades faster / less pedal', fontsize=9)
 ax.set_title('Note Decay Rate per Section / 各段落音符衰减速率\n'
-             'Li Yundi: fastest decay (driest articulation)  |  '
-             'Lang Lang: slowest (hall reverb + sustain)', fontsize=10, fontweight='bold')
+             'More negative = note fades faster (less pedal / more staccato)',
+             fontsize=10, fontweight='bold')
 ax.legend(fontsize=9)
 ax.grid(True, alpha=0.2, axis='y')
 plt.tight_layout()
@@ -360,7 +353,7 @@ raw = {
     for name, d in all_data.items()
 }
 
-dims = list(raw['Lang Lang'].keys())
+dims = list(raw[next(iter(raw))].keys())
 N    = len(dims)
 
 # Normalise each dimension 0–1 across performers
@@ -419,24 +412,30 @@ names  = list(all_data.keys())
 atks   = [all_data[n]['mean_attack'] for n in names]
 decays = [all_data[n]['mean_decay']  for n in names]
 forts  = [all_data[n]['forte_ratio'] for n in names]
+bpms_list = [all_data[n]['global_bpm'] for n in names]
 
-fastest_atk  = names[np.argmax(atks)]
+fastest_atk   = names[np.argmax(atks)]
 slowest_decay = names[np.argmin(decays)]   # most negative = fastest decay
 highest_forte = names[np.argmax(forts)]
+fastest_bpm   = names[np.argmax(bpms_list)]
+softest       = names[np.argmin(forts)]
 
-print(f"  最高起音锐度 (最硬触键): {fastest_atk}")
-print(f"  最快音符衰减 (最少踏板): {slowest_decay}")
-print(f"  最高强音比例 (最大音量): {highest_forte}")
-ll = all_data['Lang Lang']
-ly = all_data['Li Yundi']
-sw = all_data['Shen Wenyu']
-print(f"\n  → 李云迪悖论 (The Li Yundi Paradox):")
-print(f"    起音锐度最高 ({ly['mean_attack']:.3f})  +  衰减最快 ({ly['mean_decay']:.4f} RMS/s)")
-print(f"    → 触键最清晰、音符最短 — 但 ForteRatio 最低 ({ly['forte_ratio']:.1%})")
-print(f"    结论：李云迪用精准触键控制轻柔演奏，清晰不等于响亮")
-print(f"\n  → 郎朗的'力量感'来源 (Lang Lang's perceived power):")
-print(f"    BPM = 135（最快）  |  attack = {ll['mean_attack']:.3f}（受现场混响低估）")
-print(f"    ForteRatio = {ll['forte_ratio']:.1%}（中等）→ 活力感来自速度和音符密度，而非响度")
+print(f"  最高起音锐度 (最硬触键): {fastest_atk}  ({max(atks):.3f})")
+print(f"  最快音符衰减 (最少踏板): {slowest_decay}  ({min(decays):.4f} RMS/s)")
+print(f"  最高强音比例 (最大音量): {highest_forte}  ({max(forts):.1%})")
+print(f"  最快演奏速度:            {fastest_bpm}  ({max(bpms_list):.0f} BPM)")
+print(f"  最轻柔动态:              {softest}  ({min(forts):.1%} ForteRatio)")
+
+if 'Li Yundi' in all_data:
+    ly = all_data['Li Yundi']
+    print(f"\n  → 李云迪悖论 / Li Yundi Paradox:")
+    print(f"    起音锐度={ly['mean_attack']:.3f}  衰减={ly['mean_decay']:.4f} RMS/s"
+          f"  →  ForteRatio={ly['forte_ratio']:.1%}")
+if 'Lang Lang' in all_data:
+    ll = all_data['Lang Lang']
+    print(f"\n  → 郎朗 / Lang Lang:")
+    print(f"    BPM={ll['global_bpm']:.0f}  attack={ll['mean_attack']:.3f}"
+          f"  ForteRatio={ll['forte_ratio']:.1%}")
 
 print("\n" + "=" * 65)
 print("Done.")

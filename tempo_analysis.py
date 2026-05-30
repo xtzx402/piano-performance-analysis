@@ -26,27 +26,10 @@ base = Path(__file__).parent
 out  = base / 'results_ultimate' / 'plots'
 out.mkdir(parents=True, exist_ok=True)
 
-SCORE_BPM = 114.0
-WINDOW    = 30   # sliding window (number of unique score onsets)
+from config import PERFORMERS as _PERFORMERS, SECTIONS, SEC_EN, SCORE_BPM
 
-SECTIONS = [
-    ('A段 主题',  0.0,   60.8,  '#AED6F1'),
-    ('B段 抒情', 60.8,   76.8,  '#A9DFBF'),
-    ('华彩',     76.8,  130.0,  '#F9E79F'),
-    ('尾声',    130.0,  151.6,  '#F5CBA7'),
-]
-SEC_EN = {
-    'A段 主题': 'A段 主题\n(Theme A)',
-    'B段 抒情': 'B段 抒情\n(Lyrical)',
-    '华彩':     '华彩\n(Cadenza)',
-    '尾声':     '尾声\n(Coda)',
-}
-
-PERFORMERS = {
-    'Lang Lang':  '#E74C3C',
-    'Li Yundi':   '#F39C12',
-    'Shen Wenyu': '#3498DB',
-}
+PERFORMERS = {name: color for name, (path, color) in _PERFORMERS.items()}
+WINDOW = 30   # sliding window (number of unique score onsets)
 
 # ── Load data ─────────────────────────────────────────────────────────────────
 print("=" * 65)
@@ -161,7 +144,13 @@ plt.close()
 print(f"\nSaved: {p_a}")
 
 # ── Plot B: Subplots per performer (BPM + shaded vs baseline) ────────────────
-fig, axes = plt.subplots(3, 1, figsize=(15, 11), sharex=True)
+_N = len(results)
+_NCOLS = 3
+_NROWS = (_N + _NCOLS - 1) // _NCOLS
+fig, _axes_grid = plt.subplots(_NROWS, _NCOLS, figsize=(15, 4 * _NROWS + 1), sharex=True)
+axes = _axes_grid.flatten() if hasattr(_axes_grid, 'flatten') else [_axes_grid]
+for _ax in axes[_N:]:
+    _ax.set_visible(False)
 
 for ax, (name, res) in zip(axes, results.items()):
     shade(ax)
@@ -187,7 +176,8 @@ for ax, (name, res) in zip(axes, results.items()):
     ax.legend(fontsize=8, loc='upper right')
     ax.grid(True, alpha=0.2, axis='y')
 
-axes[-1].set_xlabel('Score Time (s)', fontsize=10)
+for ax in axes[max(0, _N - _NCOLS):_N]:
+    ax.set_xlabel('Score Time (s)', fontsize=10)
 label_sections(axes[0])
 
 fig.suptitle('Local BPM per Performer / 各演奏者实时速度\n'
@@ -202,7 +192,8 @@ print(f"Saved: {p_b}")
 # ── Plot C: Per-section median BPM bar chart ──────────────────────────────────
 sec_names = [s[0] for s in SECTIONS]
 x     = np.arange(len(sec_names))
-width = 0.26
+_NR   = len(results)
+width = min(0.26, 0.8 / _NR)
 
 fig, ax = plt.subplots(figsize=(11, 5))
 
@@ -215,7 +206,7 @@ for i, (name, res) in enumerate(results.items()):
         mask = (times >= sc_s) & (times < sc_e) & valid
         vals.append(float(np.nanmedian(bpms[mask])) if mask.any() else 0.0)
 
-    bars = ax.bar(x + (i - 1) * width, vals, width,
+    bars = ax.bar(x + (i - (_NR - 1) / 2) * width, vals, width,
                   label=name, color=res['color'], alpha=0.82,
                   edgecolor='white', linewidth=0.5)
     for bar, val in zip(bars, vals):

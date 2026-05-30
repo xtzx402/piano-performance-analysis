@@ -31,11 +31,8 @@ SCORE_COLOR    = '#2ECC71'
 # Synthesized WAV used only for spectral centroid (tone colour of the arrangement)
 SCORE_WAV = base / 'reference_score.wav'
 
-PERFORMERS = {
-    base / 'normalized_audio' / 'normalized_langlang_caiyun.wav':  ('Lang Lang',  '#E74C3C'),
-    base / 'normalized_audio' / 'normalized_liyundi_caiyun.wav':   ('Li Yundi',   '#F39C12'),
-    base / 'normalized_audio' / 'normalized_shenwenyu_caiyun.wav': ('Shen Wenyu', '#3498DB'),
-}
+from config import PERFORMERS as _PERFORMERS
+PERFORMERS = {path: (name, color) for name, (path, color) in _PERFORMERS.items()}
 HOP = 512
 
 print("=" * 70)

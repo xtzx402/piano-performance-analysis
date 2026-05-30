@@ -29,28 +29,7 @@ base = Path(__file__).parent
 out  = base / 'results_ultimate' / 'plots'
 out.mkdir(parents=True, exist_ok=True)
 
-SR  = 22050
-HOP = 512
-
-SCORE_DURATION = 151.6
-SECTIONS = [
-    ('A段 主题',   0.0,   60.8,  '#AED6F1'),
-    ('B段 抒情',  60.8,   76.8,  '#A9DFBF'),
-    ('华彩',      76.8,  130.0,  '#F9E79F'),
-    ('尾声',     130.0,  151.6,  '#F5CBA7'),
-]
-SEC_EN = {
-    'A段 主题': 'A段 主题\n(Theme A)',
-    'B段 抒情': 'B段 抒情\n(Lyrical)',
-    '华彩':     '华彩\n(Cadenza)',
-    '尾声':     '尾声\n(Coda)',
-}
-
-PERFORMERS = {
-    'Lang Lang':  (base / 'normalized_audio' / 'normalized_langlang_caiyun.wav',  '#E74C3C'),
-    'Li Yundi':   (base / 'normalized_audio' / 'normalized_liyundi_caiyun.wav',   '#F39C12'),
-    'Shen Wenyu': (base / 'normalized_audio' / 'normalized_shenwenyu_caiyun.wav', '#3498DB'),
-}
+from config import PERFORMERS, SECTIONS, SEC_EN, SCORE_DURATION, SR, HOP
 
 # ── Load and compute RMS envelopes ────────────────────────────────────────────
 print("=" * 65)
@@ -186,11 +165,12 @@ sec_names  = [s[0] for s in SECTIONS]
 performers = list(data.keys())
 colors     = [data[n]['color'] for n in performers]
 x          = np.arange(len(sec_names))
-width      = 0.26
+_NP        = len(performers)
+width      = min(0.26, 0.8 / _NP)
 
 for i, (name, col) in enumerate(zip(performers, colors)):
     vals = [data[name]['section_stats'].get(s, {}).get('raw_peak', 0) for s in sec_names]
-    bars = ax_bar_r.bar(x + (i - 1) * width, vals, width,
+    bars = ax_bar_r.bar(x + (i - (_NP - 1) / 2) * width, vals, width,
                         label=name.split()[0], color=col, alpha=0.80,
                         edgecolor='white', linewidth=0.5)
 
@@ -206,12 +186,14 @@ ax_bar_r.grid(True, alpha=0.2, axis='y')
 for i, (name, col) in enumerate(zip(performers, colors)):
     vals = [data[name]['section_stats'].get(s, {}).get('forte_ratio', 0) * 100
             for s in sec_names]
-    ax_bar_f.bar(x + (i - 1) * width, vals, width,
+    ax_bar_f.bar(x + (i - (_NP - 1) / 2) * width, vals, width,
                  label=name.split()[0], color=col, alpha=0.80,
                  edgecolor='white', linewidth=0.5)
 
-# Highlight 华彩 with a box
-ax_bar_f.axvspan(1.5, 2.5, color='gold', alpha=0.15, zorder=0, label='华彩 (Cadenza) highlight')
+# Highlight 华彩 with a box (dynamic index)
+_cadenza_idx = sec_names.index('华彩') if '华彩' in sec_names else 2
+ax_bar_f.axvspan(_cadenza_idx - 0.5, _cadenza_idx + 0.5,
+                 color='gold', alpha=0.15, zorder=0, label='华彩 (Cadenza) highlight')
 
 ax_bar_f.set_xticks(x)
 ax_bar_f.set_xticklabels([SEC_EN.get(s, s) for s in sec_names], fontsize=8)
@@ -244,16 +226,19 @@ for name, d in data.items():
           f"{hua.get('raw_peak', 0):>12.5f}  {hua.get('forte_ratio', 0):>14.1%}")
 
 print("\n结论 / Conclusion:")
-print("  Shen Wenyu 的家庭录制整体录音电平最低（峰值 RMS 仅为李云迪的 54%），")
-print("  直觉上容易误认为演奏力度较弱。")
-print("  但扣除噪声并峰值归一化后，华彩段的 ForteRatio 高达 28.8%，")
-print("  远超郎朗（10.8%）和李云迪（3.9%），")
-print("  说明他的强弱对比在三人中最为极端——这是真实演奏风格，而非录音设备造成的假象。")
-print("\n  Shen Wenyu's home recording has the lowest absolute peak RMS")
-print("  (54% of Li Yundi's studio level) — naively suggesting a 'soft' performance.")
-print("  But after device-independent peak-normalisation, his 华彩 ForteRatio (28.8%)")
-print("  far exceeds Lang Lang (10.8%) and Li Yundi (3.9%).")
-print("  His dynamic contrast is genuinely the most extreme of the three performers.")
+# Dynamically identify the extremes
+_all_names = list(data.keys())
+_peak_rms  = {n: data[n]['peak_rms'] for n in _all_names}
+_cadenza_fr = {n: data[n]['section_stats'].get('华彩', {}).get('forte_ratio', 0) for n in _all_names}
+_quietest  = min(_peak_rms, key=_peak_rms.get)
+_loudest_cadenza = max(_cadenza_fr, key=_cadenza_fr.get)
+_quietest_cadenza = min(_cadenza_fr, key=_cadenza_fr.get)
+print(f"  Quietest recording (lowest raw peak RMS):     {_quietest}  ({_peak_rms[_quietest]:.4f})")
+print(f"  Highest 华彩 ForteRatio after normalisation:  {_loudest_cadenza}  ({_cadenza_fr[_loudest_cadenza]:.1%})")
+print(f"  Lowest  华彩 ForteRatio after normalisation:  {_quietest_cadenza}  ({_cadenza_fr[_quietest_cadenza]:.1%})")
+_ratio = _cadenza_fr[_loudest_cadenza] / (_cadenza_fr[_quietest_cadenza] + 1e-10)
+print(f"\n  The device-independent paradox: {_loudest_cadenza} has {_ratio:.1f}× the 华彩 ForteRatio")
+print(f"  of {_quietest_cadenza}, though raw amplitude comparison may suggest otherwise.")
 
 print("\n" + "=" * 65)
 print("Done.")

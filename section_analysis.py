@@ -48,11 +48,7 @@ SEC_DISPLAY = {
 }
 
 # ── Performers ───────────────────────────────────────────────────────────────
-PERFORMERS = {
-    'Lang Lang':  (base / 'normalized_audio' / 'normalized_langlang_caiyun.wav',  '#E74C3C'),
-    'Li Yundi':   (base / 'normalized_audio' / 'normalized_liyundi_caiyun.wav',   '#F39C12'),
-    'Shen Wenyu': (base / 'normalized_audio' / 'normalized_shenwenyu_caiyun.wav', '#3498DB'),
-}
+from config import PERFORMERS
 
 HOP = 512
 SR  = 22050
@@ -188,7 +184,7 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 9))
 axes = axes.flatten()
 
 x = np.arange(N_SECTIONS)
-width = 0.25
+width = min(0.25, 0.8 / len(PERF_NAMES))
 
 for mi, (ax, (metric_key, metric_label, as_pct)) in enumerate(zip(axes, METRICS)):
     for pi, (name, color) in enumerate(zip(PERF_NAMES, COLORS)):
@@ -196,7 +192,7 @@ for mi, (ax, (metric_key, metric_label, as_pct)) in enumerate(zip(axes, METRICS)
         for sec_name, _, _ in SECTIONS:
             feat = results[name]['sections'].get(sec_name, {})
             vals.append(feat.get(metric_key, 0))
-        offset = (pi - 1) * width
+        offset = (pi - (len(PERF_NAMES) - 1) / 2) * width
         bars = ax.bar(x + offset, vals, width, label=name,
                       color=color, alpha=0.85, edgecolor='white', linewidth=0.5)
 
@@ -209,7 +205,7 @@ for mi, (ax, (metric_key, metric_label, as_pct)) in enumerate(zip(axes, METRICS)
         ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f'{v:.0%}'))
 
 fig.suptitle('分段特征比较 / Section-by-Section Feature Comparison\n'
-             '《彩云追月》 — Lang Lang · Li Yundi · Shen Wenyu',
+             f"《彩云追月》 — {' · '.join(PERF_NAMES)}",
              fontsize=13, fontweight='bold', y=1.01)
 plt.tight_layout()
 p1 = out / '14_section_comparison.png'
@@ -218,7 +214,7 @@ plt.close()
 print(f"Saved: {p1}")
 
 # ── Plot 2: per-performer section profiles (radar-like bar grids) ─────────────
-fig = plt.figure(figsize=(15, 10))
+fig = plt.figure(figsize=(15, max(10, 3.5 * len(PERF_NAMES))))
 gs  = gridspec.GridSpec(len(PERF_NAMES), N_SECTIONS,
                         hspace=0.45, wspace=0.35)
 

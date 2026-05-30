@@ -1,9 +1,27 @@
 # Quantifying Piano Performance Style with MIR
 ## A Computational Analysis of 《彩云追月》 (Colorful Clouds Chasing the Moon)
 
-This project applies music information retrieval (MIR) techniques to **quantify and explain performer-specific expressive strategies** in a shared piano repertoire. Three recordings of Wang Jianzhong's 1975 arrangement of 彩云追月 — performed by **郎朗 Lang Lang**, **李云迪 Li Yundi**, and **沈文裕 Shen Wenyu** — are analysed across multiple temporal scales: global pace, section-level dynamics and rubato, note-level agogic deviation, and per-onset attack sharpness.
+This project applies music information retrieval (MIR) techniques to **quantify and explain performer-specific expressive strategies** in a shared piano repertoire. Nine recordings of Wang Jianzhong's 1975 arrangement of 彩云追月 — performed by pianists from professional stages, recording studios, and home environments — are analysed across multiple temporal scales: global pace, section-level dynamics and rubato, note-level agogic deviation, and per-onset attack sharpness.
 
 The central research question is: **do acoustic measurements corroborate listener perception of expressive character, and if so, through which mechanisms?**
+
+### Performers (N = 9)
+
+| Performer | Recording Type | Duration | BPM | ForteRatio |
+|-----------|---------------|----------|-----|-----------|
+| 郎朗 Lang Lang | Live stage | 127.4 s | **135** | 10.4% |
+| 李云迪 Li Yundi | Studio | 187.2 s | 92 | **4.0%** (lowest) |
+| 沈文裕 Shen Wenyu | Home | 201.9 s | 85 | 10.4% |
+| 殷承宗 Yin Chengzong | Live | 169.5 s | 101 | **27.9%** (highest) |
+| Niemczuk | Studio | 215.8 s | **74** (slowest) | 7.5% |
+| HIEW Tzejia | Studio | 213.6 s | 75 | 6.1% |
+| Jasmine Wong | Studio | 183.6 s | 94 | 9.0% |
+| 陈洁 Chen Jie | Unknown | 179.2 s | 96 | 8.7% |
+| Live (Anon) | Live | 221.9 s | 75 | 4.6% |
+
+*BPM = median over the piece via DTW-aligned sliding window (score baseline = 114 BPM)*
+
+---
 
 ### Methodological Contributions
 
@@ -17,19 +35,25 @@ Three aspects of the pipeline address challenges specific to cross-recording per
 
 ---
 
-## Results: Three Core Findings
+## Results: Core Findings (validated across N = 9)
 
 ### Finding 1 — The Lang Lang Effect: Speed, Not Volume
 
-Lang Lang plays at **135 BPM** — 18% faster than the written score (114 BPM) and 60% faster than Shen Wenyu (85 BPM). His note density is the highest of the three.
+Lang Lang plays at **135 BPM** — 18% faster than the written score (114 BPM) and the fastest of all nine performers. His note density is the highest.
 
-But his sustained loudness (ForteRatio 4.4%) is moderate, and his measured attack sharpness is the lowest of the three. His "powerful" impression is generated almost entirely by **tempo and note density**, not by actually hitting the keys harder or louder.
+But his sustained loudness (ForteRatio 10.4%) is mid-range, and his measured attack sharpness (0.113) is the **lowest of the nine**. His "powerful" impression is generated almost entirely by **tempo and note density**, not by actually hitting the keys harder or louder. Even with 9 performers spanning a wide range of styles, this counterintuitive gap is clear.
 
-| | BPM | ForteRatio | Attack Sharpness |
-|--|-----|-----------|-----------------|
-| Lang Lang | **135** | 4.4% | 0.113 † |
-| Li Yundi | 92 | 1.4% | **0.225** |
-| Shen Wenyu | 85 | **13.3%** | 0.203 |
+| Performer | BPM | ForteRatio | Attack Sharpness |
+|-----------|-----|-----------|-----------------|
+| Lang Lang | **135** | 10.4% | 0.113 † (lowest) |
+| Yin Chengzong | 101 | **27.9%** | 0.177 |
+| Jasmine Wong | 94 | 9.0% | 0.200 |
+| Chen Jie | 96 | 8.7% | 0.200 |
+| Li Yundi | 92 | 4.0% | 0.225 |
+| Shen Wenyu | 85 | 10.4% | 0.203 |
+| HIEW Tzejia | 75 | 6.1% | **0.251** (highest) |
+| Live (Anon) | 75 | 4.6% | 0.188 |
+| Niemczuk | 74 | 7.5% | 0.186 |
 | Score baseline | 114 | — | — |
 
 *† Lang Lang's attack sharpness is underestimated due to live hall reverb smearing onsets.*
@@ -38,42 +62,42 @@ But his sustained loudness (ForteRatio 4.4%) is moderate, and his measured attac
 
 ### Finding 2 — The Li Yundi Paradox: Precision Without Volume
 
-Li Yundi has the **highest attack sharpness** (0.225) and the **fastest note decay rate** — meaning his individual notes are the most clearly defined and shortest-lasting of the three. He is the most articulate, most precise pianist in terms of touch.
+Li Yundi has the **second-highest attack sharpness** (0.225) and the **fastest note decay rate** among the main performers — meaning his individual notes are the most clearly defined and shortest-lasting. He is the most articulate, most precisely controlled pianist in terms of touch.
 
-Yet his sustained loudness is the **lowest** (ForteRatio 1.4%).
+Yet his sustained loudness is the **lowest of all nine** (ForteRatio 4.0%).
 
 **Clarity ≠ Loudness.** Li Yundi deploys precise, well-articulated touches in service of a pianissimo dynamic palette. His "lyrical" quality is built from exact, controlled softness — not vague legato blurring.
 
-This paradox is only visible when attack sharpness and sustained dynamics are measured separately.
+This paradox is only visible when attack sharpness and sustained dynamics are measured separately. Notably, HIEW Tzejia shows a similar pattern at larger scale (highest attack 0.251, mid-range ForteRatio 6.1%), suggesting this attack–dynamics decoupling strategy is not unique to one performer.
 
 ---
 
 ### Finding 3 — The Shen Wenyu Paradox: Hidden Dynamic Range
 
-Shen Wenyu's home recording has the **lowest absolute amplitude** (peak RMS = 0.120, vs Li Yundi's studio 0.227). A naive comparison would rank him as the softest performer.
+Shen Wenyu's home recording has one of the lower absolute amplitudes. A naive amplitude comparison would underestimate his intensity.
 
-After **noise-subtracted peak-normalisation** (removing recording gain differences):
-- His overall ForteRatio (13.3%) is **3× Lang Lang's** (4.4%) and **9× Li Yundi's** (1.4%)
-- In the **cadenza (华彩)** alone, his ForteRatio reaches **28.8%** — 7.4× Li Yundi's 3.9%
+After **noise-subtracted peak-normalisation**:
+- His cadenza (华彩) ForteRatio reaches **28.8%** — 7.4× Li Yundi's 3.9%
+- His overall ForteRatio (10.4%) matches Lang Lang despite the quieter recording environment
 
 The dynamic contrast that defines his "intense" impression is real, but **invisible without device-independent measurement**.
 
+The expanded dataset reveals an even more striking case: **殷承宗 Yin Chengzong** (co-arranger of this piece with Wang Jianzhong) achieves a 华彩 ForteRatio of **56.2%** — the most extreme forte–piano contrast of all nine recordings. His mean decay rate (−0.083 RMS/s) is also the fastest, indicating the most percussive, least-pedalled articulation style overall.
+
 ---
 
-### Unifying Observation — Macro Stability, Micro Freedom
+### Finding 4 — Macro Stability, Micro Freedom (Universal Pattern)
 
-Despite widely different styles, all three performers share one structural property: **tempo is constant across sections**.
+Despite widely different styles, **all nine performers share one structural property**: tempo is consistent within each performer's reading across sections. No performer uses section-level tempo changes as an expressive tool. Instead, all musical expression occurs at the **note level**: per-note agogic deviations, concentrated especially in the coda (尾声).
 
-| Section | Lang Lang | Li Yundi | Shen Wenyu |
-|---------|-----------|----------|-----------|
-| A段 主题 (Theme A) | 135 BPM | 92 BPM | 85 BPM |
-| B段 抒情 (Lyrical) | 135 BPM | 92 BPM | 85 BPM |
-| 华彩 (Cadenza) | 135 BPM | 92 BPM | 85 BPM |
-| 尾声 (Coda) | 135 BPM | 92 BPM | 86 BPM |
+Tempo clusters clearly into three groups:
+- **Fast**: Lang Lang (~135 BPM)
+- **Medium**: Yin Chengzong (~101), Chen Jie (~96), Jasmine Wong (~94), Li Yundi (~92)
+- **Slow**: Shen Wenyu (~85), HIEW Tzejia (~81), Niemczuk (~80), Live (Anon) (~78)
 
-None of the three uses section-level tempo changes as an expressive tool. Instead, all musical expression occurs at the **note level**: per-note agogic deviations of 60–470 ms relative to the expected beat, concentrated especially in the coda — 尾声 (Li Yundi std = 470 ms).
+Notably, **Niemczuk** (the only non-Chinese interpreter in the dataset) plays at the slowest global pace (74 BPM global average) — suggesting a different expressive framework, though conclusions from a single recording are speculative.
 
-The **cadenza — 华彩** is the section of maximum divergence across all dimensions — ForteRatio differs by 7.4× between performers, making it the strongest single discriminant of style.
+The **cadenza (华彩)** is the section of maximum divergence across all dimensions — ForteRatio spans from 3.9% (Li Yundi) to 56.2% (Yin Chengzong), making it the strongest single discriminant of style across all nine performers.
 
 ---
 
@@ -81,15 +105,15 @@ The **cadenza — 华彩** is the section of maximum divergence across all dimen
 
 > *Do acoustic measurements corroborate listener perception of expressive character, and if so, through which mechanisms?*
 
-Perceived character does map to measurable acoustic structure — but the underlying mechanism is counterintuitive in each case.
+The expanded dataset of nine performers provides stronger support for the finding that perceived character maps reliably to measurable acoustic structure — but the mechanism is often counterintuitive.
 
-**Lang Lang's "energetic" impression** is confirmed acoustically, but its source is tempo (135 BPM, 18% above score) and note density rather than dynamic intensity. His ForteRatio (4.4%) is moderate and his measured attack sharpness is the lowest of the three. Perceived energy is a rate effect, not an amplitude effect.
+**Lang Lang's "energetic" impression** is confirmed acoustically, but its source is tempo (135 BPM) and note density rather than dynamic intensity. His ForteRatio is mid-range and his attack sharpness is the lowest of the nine (partly confounded by hall reverb). Perceived energy is a rate effect, not an amplitude effect.
 
-**Li Yundi's "lyrical" impression** is confirmed, but not through the expected mechanism of legato blurring. He is in fact the most precisely articulate performer: highest attack sharpness (0.225) and fastest note decay. His lyricism arises from applying sharp, well-defined touches at the softest dynamic level — precision in service of quietness.
+**Li Yundi's "lyrical" impression** is confirmed, but not through legato blurring. He is among the most precisely articulate performers: second-highest attack sharpness and fastest decay. His lyricism arises from applying sharp, well-defined touches at the softest dynamic level — precision in service of quietness. The dataset now shows a similar pattern in HIEW Tzejia, suggesting this strategy is systematically available.
 
-**Shen Wenyu's "intense" impression** is the most acoustically grounded, but only observable through device-independent normalisation. A naive amplitude comparison ranks him last; after debiasing, his cadenza ForteRatio (28.8%) is 7.4× Li Yundi's. The intensity is real but hidden by recording conditions.
+**Shen Wenyu's "intense" impression** is acoustically grounded, but only observable through device-independent normalisation. The expanded dataset reveals that **Yin Chengzong** represents an even more extreme dynamic performer — a finding invisible from raw amplitude alone.
 
-These results suggest that **listener perception reliably tracks performer intent at the level of expressive strategy**, even when the specific acoustic mechanism differs from naive expectation.
+These results suggest that **listener perception reliably tracks performer intent at the level of expressive strategy**, even when the specific acoustic mechanism differs from naive expectation. The finding generalises beyond the original three performers: across nine recordings spanning live, studio, and home environments, the same decoupling between raw amplitude and normalised dynamic contrast is consistently visible.
 
 ---
 
@@ -97,18 +121,46 @@ These results suggest that **listener perception reliably tracks performer inten
 
 **郎朗 Lang Lang — The Velocity Architect**
 - Fastest tempo (135 BPM, 18% above score); note density drives perceived energy
-- Moderate dynamics (ForteRatio 4.4%); rhythm locked at CV ≈ 0.17 in every section
+- ForteRatio 10.4%; attack sharpness lowest (0.113, partly reverb)
 - "Energetic" impression is a tempo effect, not an amplitude effect
 
 **李云迪 Li Yundi — The Articulate Whisperer**
-- Sharpest attack (0.225) and fastest decay — most precisely defined note boundaries
-- Softest sustained dynamics (1.4%); highest rhythmic freedom (Timing CV = 0.286)
-- Coda (尾声) ending: near-silent with extreme temporal freedom (agogic std = 470 ms)
+- Second-sharpest attack (0.225) and fastest decay — most precisely defined note boundaries
+- Softest sustained dynamics of all nine (ForteRatio 4.0%); highest rhythmic freedom
+- Coda (尾声): near-silent with extreme temporal freedom (agogic std ≈ 470 ms)
 
-**沈文裕 Shen Wenyu — The Dynamic Extremist**
-- Most extreme forte–piano contrast; cadenza (华彩) ForteRatio = 28.8% (7.4× Li Yundi)
-- Home recording is the quietest in absolute terms — paradox invisible without normalisation
-- Slowest tempo (85 BPM); rushes ahead most in opening theme (A段, agogic mean = −45 ms)
+**沈文裕 Shen Wenyu — The Dynamic Extremist (Home)**
+- Most extreme forte–piano contrast among studio/home recordings; cadenza ForteRatio = 28.8%
+- Home recording is quiet in absolute terms — paradox invisible without normalisation
+- Slowest tempo in the original trio (85 BPM)
+
+**殷承宗 Yin Chengzong — The Co-Arranger's Authority**
+- Highest ForteRatio of all nine (27.9% global, 56.2% in cadenza)
+- Fastest note decay rate (−0.083 RMS/s) — most percussive, least-pedalled articulation
+- Plays at 101 BPM — close to the written score tempo (114 BPM)
+- As co-arranger, likely plays closest to the intended character of the piece
+
+**Niemczuk — The Cross-Cultural Interpreter**
+- Slowest global tempo (74 BPM, 35% below score baseline)
+- Mid-range dynamics and attack — metrically spacious, not extreme in any dimension
+- Only non-Chinese interpreter; suggests different expressive pacing framework
+
+**HIEW Tzejia — The Precise Articulator**
+- Highest attack sharpness of all nine (0.251) — most percussive onset character
+- Mid-range ForteRatio (6.1%) — high attack without high sustained loudness
+- Replicates the attack/dynamics decoupling pattern of Li Yundi at a different scale
+
+**Jasmine Wong — The Balanced Interpreter**
+- Well-rounded profile: mid-range BPM (94), ForteRatio (9.0%), attack (0.200)
+- No single extreme dimension; balanced expression across all metrics
+
+**陈洁 Chen Jie — The Quiet Articulator**
+- Lowest raw peak RMS of all nine recordings
+- Moderate timing flexibility (CV 0.224); attack 0.200; low ForteRatio (8.7%)
+
+**Live (Anon) — The Slow Expressionist**
+- Slowest of the live recordings (75 BPM); highest rhythmic flexibility (CV 0.255)
+- ForteRatio 4.6% — soft dynamics maintained throughout
 
 ---
 
@@ -132,7 +184,7 @@ Removes microphone noise bias and recording gain differences. What remains is re
 
 ### Attack Sharpness
 
-Peak-normalised onset strength at each detected onset. Captures how suddenly each note's amplitude rises (percussive vs smooth attack). Note: live hall reverb attenuates measured onset sharpness for Lang Lang.
+Peak-normalised onset strength at each detected onset. Captures how suddenly each note's amplitude rises (percussive vs smooth attack). Note: live hall reverb attenuates measured onset sharpness for live recordings (Lang Lang, Yin Chengzong, Live Anon).
 
 ### Local BPM
 
@@ -142,11 +194,19 @@ Sliding window of 30 unique score onsets. For each window: `local_BPM = 114 × (
 
 ## Audio Preprocessing
 
+All audio normalised to 22050 Hz mono. Leading silence trimmed where present (threshold: 1% of peak RMS). See `performers.json` for full metadata.
+
 | Pianist | Recording Type | Duration | Preprocessing |
 |---------|---------------|----------|--------------|
-| Lang Lang | Live stage performance | 127.4 s | Sample rate normalised |
-| Li Yundi | Studio | 187.2 s | — |
-| Shen Wenyu | Home recording | 201.9 s | 7.4 s pre-music noise trimmed |
+| 郎朗 Lang Lang | Live stage | 127.4 s | Sample rate normalised |
+| 李云迪 Li Yundi | Studio | 187.2 s | — |
+| 沈文裕 Shen Wenyu | Home | 201.9 s | 7.4 s pre-music noise trimmed |
+| 殷承宗 Yin Chengzong | Live | 169.5 s | — |
+| Niemczuk | Studio | 215.8 s | 7.5 s leading silence trimmed |
+| HIEW Tzejia | Studio | 213.6 s | 3.4 s leading silence trimmed |
+| Jasmine Wong | Studio | 183.6 s | 1.4 s leading silence trimmed |
+| 陈洁 Chen Jie | Unknown | 179.2 s | — |
+| Live (Anon) | Live | 221.9 s | — |
 
 ---
 
@@ -160,17 +220,21 @@ Sound project/
 ├── note_alignment.py            # Note-level agogic deviation via DTW
 ├── tempo_analysis.py            # Local BPM curves from aligned onsets
 ├── attack_analysis.py           # Attack sharpness, decay rate, fingerprint
-├── dynamics_paradox.py          # Shen Wenyu dynamics paradox visualisation
+├── dynamics_paradox.py          # Device-independent dynamics visualisation
 ├── ultimate_pipeline.py         # MFCC statistical classification
 ├── enhanced_pipeline.py         # Extended feature extraction
 ├── expressive_style_pipeline.py # 9-dimensional expressive analysis
+│
+├── DATASET MANAGEMENT
+├── performers.json              # Central performer registry (name, file, color, metadata)
+├── config.py                    # Shared constants loaded by all analysis scripts
+├── add_performer.py             # CLI helper: preprocess + register new recordings
 │
 ├── SCORE REFERENCE
 ├── synthesize_reference.py
 ├── cai-yun-zhui-yue-ren-guang-qu-...mid   # Real MIDI from OMR
 │
 ├── AUDIO
-├── audio_normalization.py
 ├── normalized_audio/            # Preprocessed WAVs (git-ignored)
 │
 └── results_ultimate/
@@ -178,10 +242,10 @@ Sound project/
     │   ├── 12_score_vs_performers_curves.png
     │   ├── 13_score_deviation_bars.png
     │   ├── 14_section_comparison.png      # Section ForteRatio grouped bar
-    │   ├── 15_section_profiles.png        # Per-performer section radar grid
+    │   ├── 15_section_profiles.png        # Per-performer section bar grid
     │   ├── 16_section_rubato_dynamics.png # Timing CV + ForteRatio line plots
     │   ├── 17_agogic_deviation.png        # Per-note timing deviation curves
-    │   ├── 18_agogic_overlay.png          # Three performers overlaid
+    │   ├── 18_agogic_overlay.png          # All performers overlaid
     │   ├── 19_agogic_boxplot.png          # Box plots per section
     │   ├── 20_dynamics_paradox.png        # Raw vs normalised RMS
     │   ├── 21_local_bpm_curves.png        # Local BPM overlay
@@ -204,32 +268,32 @@ Sound project/
 ### Performer Fingerprint
 ![Fingerprint](results_ultimate/plots/27_performer_fingerprint.png)
 
-Five-dimensional normalised radar: Speed, Dynamics, Attack Sharpness, Rubato, Sustain. The three performers occupy distinctly different regions.
+Five-dimensional normalised radar: Speed, Dynamics, Attack Sharpness, Rubato, Sustain. The nine performers occupy distinctly different regions of the feature space.
 
 ### Li Yundi Paradox
 ![Li Yundi Paradox](results_ultimate/plots/25_liyundi_paradox.png)
 
-Bubble chart: X = attack sharpness, Y = ForteRatio, bubble size = tempo. Li Yundi sits at top-left (sharp attack, soft dynamics). Lang Lang is bottom-left with the largest bubble (fast tempo as main differentiator).
+Bubble chart: X = attack sharpness, Y = ForteRatio, bubble size = tempo. Li Yundi sits at upper-left (sharp attack, soft dynamics). Lang Lang has the largest bubble (tempo as main differentiator). HIEW Tzejia has the rightmost position (highest attack).
 
 ### Dynamics Paradox
 ![Dynamics Paradox](results_ultimate/plots/20_dynamics_paradox.png)
 
-Raw vs device-independent RMS. Shen Wenyu is quietest in absolute level but shows highest dynamic contrast after normalisation.
+Raw vs device-independent RMS. Shen Wenyu is among the quietest in absolute level but shows high dynamic contrast after normalisation. Yin Chengzong shows the most extreme cadenza ForteRatio (56.2%) of all nine.
 
 ### Note-Level Agogic Deviation
 ![Agogic Deviation](results_ultimate/plots/17_agogic_deviation.png)
 
-Per-note timing deviation from expected beat. The lyrical interlude (B段) is the most metronomic section; Li Yundi's coda (尾声) has extreme temporal freedom (std = 470 ms).
+Per-note timing deviation from expected beat. The lyrical interlude (B段) is the most metronomic section across all performers; Li Yundi's coda (尾声) has extreme temporal freedom.
 
 ### Local BPM
 ![Local BPM](results_ultimate/plots/21_local_bpm_curves.png)
 
-All three performers maintain consistent tempo throughout the piece. Expression is at the note level, not the architectural level.
+All nine performers maintain consistent tempo within their own reading throughout the piece. Expression is at the note level, not the architectural level.
 
 ### Section Comparison
 ![Section Comparison](results_ultimate/plots/14_section_comparison.png)
 
-The cadenza (华彩) is the widest point of divergence across all metrics.
+The cadenza (华彩) is the widest point of divergence across all metrics and all performers.
 
 ---
 
@@ -245,6 +309,7 @@ The cadenza (华彩) is the widest point of divergence across all metrics.
 | [pandas](https://pandas.pydata.org) | ≥ 2.0 | Feature tables and CSV export |
 | [scikit-learn](https://scikit-learn.org) | ≥ 1.3 | SVM classification, K-means clustering, ANOVA, Tukey HSD |
 | [matplotlib](https://matplotlib.org) | ≥ 3.7 | All visualisations (line plots, box plots, radar charts, scatter) |
+| [soundfile](https://pysoundfile.readthedocs.io) | ≥ 0.12 | WAV writing for preprocessed audio |
 
 Python ≥ 3.10 recommended.
 
@@ -252,10 +317,15 @@ Python ≥ 3.10 recommended.
 
 ```bash
 pip install -r requirements.txt
-python synthesize_reference.py     # build score WAV
+python synthesize_reference.py     # build score WAV (once)
+
+# Add new performers
+python add_performer.py <audio_file> "<Name>" --type "Studio" --notes "..."
+
+# Run full analysis pipeline
 python score_vs_performers.py      # global comparison
 python section_analysis.py         # section-by-section
-python note_alignment.py           # note-level DTW
+python note_alignment.py           # note-level DTW  (run before tempo_analysis)
 python tempo_analysis.py           # local BPM
 python attack_analysis.py          # attack + fingerprint
 python dynamics_paradox.py         # dynamics paradox
@@ -266,8 +336,9 @@ python dynamics_paradox.py         # dynamics paradox
 ## Limitations
 
 - Single piece per performer; findings characterise this recording, not the performers' full artistic identity
-- Recording conditions differ (live / studio / home); debiasing mitigates but cannot fully eliminate environmental effects — Lang Lang's attack sharpness is likely underestimated due to hall reverb
-- Acoustic features capture *what* happens but not *why*; differences may reflect technique, musical philosophy, instrument, or score edition
+- Recording conditions differ (live / studio / home); debiasing mitigates but cannot fully eliminate environmental effects — live hall reverb attenuates measured attack sharpness for Lang Lang, Yin Chengzong, and Live (Anon)
+- Acoustic features capture *what* happens but not *why*; differences may reflect technique, musical philosophy, instrument, score edition, or recording chain
+- Cross-cultural comparisons (Niemczuk vs. Chinese-trained pianists) are speculative from a single recording each
 
 ---
 
@@ -277,5 +348,5 @@ MIT License — Wenli
 
 ## Acknowledgments
 
-Performances by Lang Lang, Li Yundi, and Shen Wenyu · Wang Jianzhong piano arrangement (1975)
+Performances by Lang Lang, Li Yundi, Shen Wenyu, Yin Chengzong, Niemczuk, HIEW Tzejia, Jasmine Wong, Chen Jie, and anonymous performers · Wang Jianzhong and 殷承宗 Yin Chengzong piano arrangement (1975)
 librosa · scikit-learn · scipy · fastdtw · mido

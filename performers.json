@@ -19,5 +19,47 @@
     "recording_type": "Home",
     "year": null,
     "notes": "Home recording; 7.4s pre-music noise trimmed"
+  },
+  "Yin Chengzong": {
+    "file": "normalized_yin_chengzong_caiyun.wav",
+    "color": "#2ECC71",
+    "recording_type": "Live",
+    "year": null,
+    "notes": "Co-arranger of the piece"
+  },
+  "Niemczuk": {
+    "file": "normalized_niemczuk_caiyun.wav",
+    "color": "#9B59B6",
+    "recording_type": "Studio",
+    "year": null,
+    "notes": "Non-Chinese interpreter, Bechstein piano; 7.5s leading silence trimmed"
+  },
+  "HIEW Tzejia": {
+    "file": "normalized_hiew_tzejia_caiyun.wav",
+    "color": "#1ABC9C",
+    "recording_type": "Studio",
+    "year": null,
+    "notes": "; 3.4s leading silence trimmed"
+  },
+  "Jasmine Wong": {
+    "file": "normalized_jasmine_wong_caiyun.wav",
+    "color": "#E67E22",
+    "recording_type": "Studio",
+    "year": null,
+    "notes": "; 1.4s leading silence trimmed"
+  },
+  "Chen Jie": {
+    "file": "normalized_chen_jie_caiyun.wav",
+    "color": "#34495E",
+    "recording_type": "Unknown",
+    "year": null,
+    "notes": ""
+  },
+  "Live (Anon)": {
+    "file": "normalized_live_(anon)_caiyun.wav",
+    "color": "#F1C40F",
+    "recording_type": "Live",
+    "year": null,
+    "notes": "; 0.5s leading silence trimmed"
   }
 }

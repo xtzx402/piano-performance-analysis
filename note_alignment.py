@@ -39,25 +39,7 @@ SR  = 22050
 HOP = 512          # frame resolution for onset detection and feature extraction
 DTW_RADIUS = 60    # ±60 onset-index positions (handles ornaments / missed detections)
 
-# ── Section boundaries (score seconds) ───────────────────────────────────────
-SECTIONS = [
-    ('A段 主题',  0.0,   60.8,  '#AED6F1'),
-    ('B段 抒情', 60.8,   76.8,  '#A9DFBF'),
-    ('华彩',     76.8,  130.0,  '#F9E79F'),
-    ('尾声',    130.0,  151.6,  '#F5CBA7'),
-]
-SEC_EN = {
-    'A段 主题': 'A段 主题\n(Theme A)',
-    'B段 抒情': 'B段 抒情\n(Lyrical)',
-    '华彩':     '华彩\n(Cadenza)',
-    '尾声':     '尾声\n(Coda)',
-}
-
-PERFORMERS = {
-    'Lang Lang':  (base / 'normalized_audio' / 'normalized_langlang_caiyun.wav',  '#E74C3C'),
-    'Li Yundi':   (base / 'normalized_audio' / 'normalized_liyundi_caiyun.wav',   '#F39C12'),
-    'Shen Wenyu': (base / 'normalized_audio' / 'normalized_shenwenyu_caiyun.wav', '#3498DB'),
-}
+from config import PERFORMERS, SECTIONS, SEC_EN
 
 SCORE_WAV  = base / 'reference_score.wav'
 SCORE_MIDI = base / 'cai-yun-zhui-yue-ren-guang-qu-wang-jian-zhong-gai-bian.mid'
@@ -224,7 +206,13 @@ def shade_sections(ax, y_bottom=-9999, y_top=9999):
         ax.axvline(start, color='gray', linewidth=0.8, linestyle=':', zorder=1)
 
 # ── Plot A: Agogic deviation over score time (smoothed) ──────────────────────
-fig, axes = plt.subplots(3, 1, figsize=(15, 11), sharex=True)
+_N = len(all_results)
+_NCOLS = 3
+_NROWS = (_N + _NCOLS - 1) // _NCOLS
+fig, _axes_grid = plt.subplots(_NROWS, _NCOLS, figsize=(15, 4 * _NROWS + 1), sharex=True)
+axes = _axes_grid.flatten() if hasattr(_axes_grid, 'flatten') else [_axes_grid]
+for _ax in axes[_N:]:
+    _ax.set_visible(False)
 
 for ax, (name, res) in zip(axes, all_results.items()):
     df     = res['df']
@@ -254,7 +242,9 @@ for ax, (name, res) in zip(axes, all_results.items()):
                     SEC_EN.get(sec_name, sec_name), ha='center', va='top', fontsize=8,
                     color='#555555', fontweight='bold')
 
-axes[-1].set_xlabel('Score Time (s)', fontsize=10)
+# Label x-axis on last visible row
+for ax in axes[max(0, _N - _NCOLS):_N]:
+    ax.set_xlabel('Score Time (s)', fontsize=10)
 
 # Add section labels after limits are set
 for ax, (name, res) in zip(axes, all_results.items()):
@@ -297,8 +287,9 @@ for sec_name, start, end, _ in SECTIONS:
             SEC_EN.get(sec_name, sec_name), ha='center', va='top',
             fontsize=8, color='#444', fontweight='bold')
 
-fig.suptitle('Agogic Deviation Overlay / 三位演奏者逐音符时值偏差叠加对比\n'
-             'Lang Lang · Li Yundi · Shen Wenyu  |  《彩云追月》',
+_perf_str = '  ·  '.join(all_results.keys())
+fig.suptitle('Agogic Deviation Overlay / 演奏者逐音符时值偏差叠加对比\n'
+             f'{_perf_str}  |  《彩云追月》',
              fontsize=13, fontweight='bold')
 plt.tight_layout()
 p_b = out / '18_agogic_overlay.png'
