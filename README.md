@@ -1,23 +1,23 @@
-# Piano Performance Style Analysis
-## Colorful Clouds Chasing the Moon · 《彩云追月》
+# Quantifying Piano Performance Style with MIR
+## A Computational Analysis of 《彩云追月》 (Colorful Clouds Chasing the Moon)
 
-A music information retrieval (MIR) project comparing the expressive performance styles of three renowned Chinese pianists — **Lang Lang**, **Li Yundi**, and **Shen Wenyu** — performing the Wang Jianzhong 1975 piano arrangement of 彩云追月.
+This project applies music information retrieval (MIR) techniques to **quantify and explain performer-specific expressive strategies** in a shared piano repertoire. Three recordings of Wang Jianzhong's 1975 arrangement of 彩云追月 — performed by **郎朗 Lang Lang**, **李云迪 Li Yundi**, and **沈文裕 Shen Wenyu** — are analysed across multiple temporal scales: global pace, section-level dynamics and rubato, note-level agogic deviation, and per-onset attack sharpness.
+
+The central research question is: **do acoustic measurements corroborate listener perception of expressive character, and if so, through which mechanisms?**
+
+### Methodological Contributions
+
+Three aspects of the pipeline address challenges specific to cross-recording performance comparison:
+
+1. **Device-independent dynamics**: A two-step noise-floor subtraction and peak-normalisation removes recording-gain and microphone-noise differences before any amplitude comparison, enabling valid dynamics comparison across live, studio, and home recordings.
+
+2. **MIDI-grounded score alignment**: Rather than audio-to-audio DTW (which fails across different recording environments), performer onsets are aligned to MIDI score onsets on a shared time axis via fastdtw on 1D onset sequences. This yields per-note agogic deviation in milliseconds without timbre-matching assumptions.
+
+3. **Multi-scale analysis framework**: Features are extracted at four nested scales — global pace ratio, per-section medians, per-note alignment, and per-onset attack slope — making it possible to distinguish macro-level interpretation choices from micro-level expressive gestures.
 
 ---
 
-## The Central Question
-
-Three performers. One piece. Three radically different impressions:
-
-> Lang Lang sounds **energetic and driving**.
-> Li Yundi sounds **lyrical and expressive**.
-> Shen Wenyu sounds **deliberate and intense**.
-
-Which acoustic properties actually create these perceptions — and are our intuitions correct?
-
----
-
-## Three Core Findings
+## Results: Three Core Findings
 
 ### Finding 1 — The Lang Lang Effect: Speed, Not Volume
 
@@ -77,19 +77,19 @@ The **cadenza — 华彩** is the section of maximum divergence across all dimen
 
 ---
 
-### Answering the Central Question
+### Discussion: Answering the Research Question
 
-> *Which acoustic properties actually create these perceptions — and are our intuitions correct?*
+> *Do acoustic measurements corroborate listener perception of expressive character, and if so, through which mechanisms?*
 
-Our intuitions are directionally right but mechanistically wrong in every case.
+Perceived character does map to measurable acoustic structure — but the underlying mechanism is counterintuitive in each case.
 
-**Lang Lang does sound energetic** — but the source is tempo (135 BPM, 18% above score), not dynamics. His ForteRatio is moderate and his attack sharpness is the lowest of the three. The "powerful" impression is a perceptual effect of pace and note density, not of hitting harder.
+**Lang Lang's "energetic" impression** is confirmed acoustically, but its source is tempo (135 BPM, 18% above score) and note density rather than dynamic intensity. His ForteRatio (4.4%) is moderate and his measured attack sharpness is the lowest of the three. Perceived energy is a rate effect, not an amplitude effect.
 
-**Li Yundi does sound lyrical** — but not because of blurred legato softness. He is actually the most precisely articulate performer (highest attack sharpness, fastest decay). His lyricism comes from deploying that precision at the softest dynamic level. Clarity, not vagueness, is his tool.
+**Li Yundi's "lyrical" impression** is confirmed, but not through the expected mechanism of legato blurring. He is in fact the most precisely articulate performer: highest attack sharpness (0.225) and fastest note decay. His lyricism arises from applying sharp, well-defined touches at the softest dynamic level — precision in service of quietness.
 
-**Shen Wenyu does sound intense** — and this intuition is the most accurate. His dynamic contrast is genuinely the most extreme. But this is only verifiable through device-independent normalisation; a naive amplitude comparison would rank him last.
+**Shen Wenyu's "intense" impression** is the most acoustically grounded, but only observable through device-independent normalisation. A naive amplitude comparison ranks him last; after debiasing, his cadenza ForteRatio (28.8%) is 7.4× Li Yundi's. The intensity is real but hidden by recording conditions.
 
-In short: perceived character maps to real acoustic structure, but the mechanism behind each impression is consistently counterintuitive.
+These results suggest that **listener perception reliably tracks performer intent at the level of expressive strategy**, even when the specific acoustic mechanism differs from naive expectation.
 
 ---
 
