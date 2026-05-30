@@ -27,3 +27,10 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Obsolete / superseded files
+generate_reference_midi.py
+create_reference_midi.py
+reference_caiyun.mid
+reference_caiyun.wav
+score_pages/

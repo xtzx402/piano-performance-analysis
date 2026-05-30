@@ -1,4 +1,4 @@
 ﻿Performer,Original SR (Hz),Original Duration (s),Original RMS,Start Point Detected (s),Trimmed Duration (s),Trimmed RMS,Scale Factor,Final SR (Hz),Final Duration (s),Final RMS,Output File
 郎朗 (Lang Lang),44100,127.36,0.17867972,0.0,127.36,0.17867972,0.2798303,22050,127.36,0.049999993,normalized_audio\normalized_langlang_caiyun.wav
 李云迪 (Li Yundi),44100,188.2441723356009,0.055053767,1.0493877551020407,187.19478458049886,0.05520786,0.90566814,22050,187.19478458049886,0.049999993,normalized_audio\normalized_liyundi_caiyun.wav
-沈文裕 (Shen Wenyu),44100,209.32265306122449,0.049911957,0.016099773242630386,209.30655328798187,0.04991388,1.0017254,22050,209.3065759637188,0.049999814,normalized_audio\normalized_shenwenyu_caiyun.wav
+沈文裕 (Shen Wenyu),44100,201.92265306122448,0.050817955,0.0,201.92265306122448,0.050817955,0.98390424,22050,201.92267573696145,0.049999833,normalized_audio\normalized_shenwenyu_caiyun.wav
