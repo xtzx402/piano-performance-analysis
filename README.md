@@ -9,9 +9,9 @@ The central research question is: **do acoustic measurements corroborate listene
 
 | Performer | Recording Type | Duration | BPM | ForteRatio | Source |
 |-----------|---------------|----------|-----|-----------|--------|
-| 郎朗 Lang Lang | Live stage | 127.4 s | **135** | 10.4% | — |
-| 李云迪 Li Yundi | Studio | 187.2 s | 92 | **4.0%** (lowest) | — |
-| 沈文裕 Shen Wenyu | Home | 201.9 s | 85 | 10.4% | — |
+| 郎朗 Lang Lang | Live stage | 127.4 s | **135** | 10.4% | [Bilibili](https://www.bilibili.com/video/BV1Av411B789/) |
+| 李云迪 Li Yundi | Studio | 187.2 s | 92 | **4.0%** (lowest) | [Bilibili](https://www.bilibili.com/video/BV1px411X7ou) |
+| 沈文裕 Shen Wenyu | Home | 201.9 s | 85 | 10.4% | [Bilibili](https://www.bilibili.com/video/BV19A411u7ag) |
 | 殷承宗 Yin Chengzong | Live | 169.5 s | 101 | **27.9%** (highest) | [YouTube](https://www.youtube.com/watch?v=fKhI9QYEk-Y) |
 | Niemczuk | Studio | 215.8 s | **74** (slowest) | 7.5% | [YouTube](https://www.youtube.com/watch?v=VjCCfLG7gDI) |
 | HIEW Tzejia | Studio | 213.6 s | 75 | 6.1% | [YouTube](https://www.youtube.com/watch?v=j-wshlxGqLU) |
@@ -20,7 +20,6 @@ The central research question is: **do acoustic measurements corroborate listene
 | Live (Anon) | Live | 221.9 s | 75 | 4.6% | [YouTube](https://www.youtube.com/watch?v=Cqb2RpsZ1PA) |
 
 *BPM = median over the piece via DTW-aligned sliding window (score baseline = 114 BPM)*
-*Lang Lang, Li Yundi, Shen Wenyu: source URLs not recorded; add to `performers.json` if known.*
 
 ---
 
@@ -211,9 +210,9 @@ All audio normalised to 22050 Hz mono. Leading silence trimmed where present (th
 
 | Pianist | Type | Duration | Preprocessing | Source |
 |---------|------|----------|--------------|--------|
-| 郎朗 Lang Lang | Live stage | 127.4 s | Sample rate normalised | — |
-| 李云迪 Li Yundi | Studio | 187.2 s | — | — |
-| 沈文裕 Shen Wenyu | Home | 201.9 s | 7.4 s pre-music noise trimmed | — |
+| 郎朗 Lang Lang | Live stage | 127.4 s | Sample rate normalised | [BV1Av411B789](https://www.bilibili.com/video/BV1Av411B789/) |
+| 李云迪 Li Yundi | Studio | 187.2 s | — | [BV1px411X7ou](https://www.bilibili.com/video/BV1px411X7ou) |
+| 沈文裕 Shen Wenyu | Home | 201.9 s | 7.4 s pre-music noise trimmed | [BV19A411u7ag](https://www.bilibili.com/video/BV19A411u7ag) |
 | 殷承宗 Yin Chengzong | Live | 169.5 s | — | [youtu.be/fKhI9QYEk-Y](https://www.youtube.com/watch?v=fKhI9QYEk-Y) |
 | Niemczuk | Studio | 215.8 s | 7.5 s leading silence trimmed | [youtu.be/VjCCfLG7gDI](https://www.youtube.com/watch?v=VjCCfLG7gDI) |
 | HIEW Tzejia | Studio | 213.6 s | 3.4 s leading silence trimmed | [youtu.be/j-wshlxGqLU](https://www.youtube.com/watch?v=j-wshlxGqLU) |
