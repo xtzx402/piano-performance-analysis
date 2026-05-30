@@ -4,6 +4,7 @@
     "color": "#E74C3C",
     "recording_type": "Live stage",
     "year": null,
+    "source_url": null,
     "notes": "Live stage performance"
   },
   "Li Yundi": {
@@ -11,6 +12,7 @@
     "color": "#F39C12",
     "recording_type": "Studio",
     "year": null,
+    "source_url": null,
     "notes": "Studio recording"
   },
   "Shen Wenyu": {
@@ -18,6 +20,7 @@
     "color": "#3498DB",
     "recording_type": "Home",
     "year": null,
+    "source_url": null,
     "notes": "Home recording; 7.4s pre-music noise trimmed"
   },
   "Yin Chengzong": {
@@ -25,6 +28,7 @@
     "color": "#2ECC71",
     "recording_type": "Live",
     "year": null,
+    "source_url": "https://www.youtube.com/watch?v=fKhI9QYEk-Y",
     "notes": "Co-arranger of the piece"
   },
   "Niemczuk": {
@@ -32,6 +36,7 @@
     "color": "#9B59B6",
     "recording_type": "Studio",
     "year": null,
+    "source_url": "https://www.youtube.com/watch?v=VjCCfLG7gDI",
     "notes": "Non-Chinese interpreter, Bechstein piano; 7.5s leading silence trimmed"
   },
   "HIEW Tzejia": {
@@ -39,20 +44,23 @@
     "color": "#1ABC9C",
     "recording_type": "Studio",
     "year": null,
-    "notes": "; 3.4s leading silence trimmed"
+    "source_url": "https://www.youtube.com/watch?v=j-wshlxGqLU",
+    "notes": "3.4s leading silence trimmed"
   },
   "Jasmine Wong": {
     "file": "normalized_jasmine_wong_caiyun.wav",
     "color": "#E67E22",
     "recording_type": "Studio",
     "year": null,
-    "notes": "; 1.4s leading silence trimmed"
+    "source_url": "https://www.youtube.com/watch?v=66qcsOHoVFI",
+    "notes": "1.4s leading silence trimmed"
   },
   "Chen Jie": {
     "file": "normalized_chen_jie_caiyun.wav",
     "color": "#34495E",
     "recording_type": "Unknown",
     "year": null,
+    "source_url": "https://www.youtube.com/watch?v=xOy3K_VYPKM",
     "notes": ""
   },
   "Live (Anon)": {
@@ -60,6 +68,7 @@
     "color": "#F1C40F",
     "recording_type": "Live",
     "year": null,
-    "notes": "; 0.5s leading silence trimmed"
+    "source_url": "https://www.youtube.com/watch?v=Cqb2RpsZ1PA",
+    "notes": "0.5s leading silence trimmed"
   }
 }

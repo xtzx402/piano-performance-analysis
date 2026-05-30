@@ -7,19 +7,20 @@ The central research question is: **do acoustic measurements corroborate listene
 
 ### Performers (N = 9)
 
-| Performer | Recording Type | Duration | BPM | ForteRatio |
-|-----------|---------------|----------|-----|-----------|
-| 郎朗 Lang Lang | Live stage | 127.4 s | **135** | 10.4% |
-| 李云迪 Li Yundi | Studio | 187.2 s | 92 | **4.0%** (lowest) |
-| 沈文裕 Shen Wenyu | Home | 201.9 s | 85 | 10.4% |
-| 殷承宗 Yin Chengzong | Live | 169.5 s | 101 | **27.9%** (highest) |
-| Niemczuk | Studio | 215.8 s | **74** (slowest) | 7.5% |
-| HIEW Tzejia | Studio | 213.6 s | 75 | 6.1% |
-| Jasmine Wong | Studio | 183.6 s | 94 | 9.0% |
-| 陈洁 Chen Jie | Unknown | 179.2 s | 96 | 8.7% |
-| Live (Anon) | Live | 221.9 s | 75 | 4.6% |
+| Performer | Recording Type | Duration | BPM | ForteRatio | Source |
+|-----------|---------------|----------|-----|-----------|--------|
+| 郎朗 Lang Lang | Live stage | 127.4 s | **135** | 10.4% | — |
+| 李云迪 Li Yundi | Studio | 187.2 s | 92 | **4.0%** (lowest) | — |
+| 沈文裕 Shen Wenyu | Home | 201.9 s | 85 | 10.4% | — |
+| 殷承宗 Yin Chengzong | Live | 169.5 s | 101 | **27.9%** (highest) | [YouTube](https://www.youtube.com/watch?v=fKhI9QYEk-Y) |
+| Niemczuk | Studio | 215.8 s | **74** (slowest) | 7.5% | [YouTube](https://www.youtube.com/watch?v=VjCCfLG7gDI) |
+| HIEW Tzejia | Studio | 213.6 s | 75 | 6.1% | [YouTube](https://www.youtube.com/watch?v=j-wshlxGqLU) |
+| Jasmine Wong | Studio | 183.6 s | 94 | 9.0% | [YouTube](https://www.youtube.com/watch?v=66qcsOHoVFI) |
+| 陈洁 Chen Jie | Unknown | 179.2 s | 96 | 8.7% | [YouTube](https://www.youtube.com/watch?v=xOy3K_VYPKM) |
+| Live (Anon) | Live | 221.9 s | 75 | 4.6% | [YouTube](https://www.youtube.com/watch?v=Cqb2RpsZ1PA) |
 
 *BPM = median over the piece via DTW-aligned sliding window (score baseline = 114 BPM)*
+*Lang Lang, Li Yundi, Shen Wenyu: source URLs not recorded; add to `performers.json` if known.*
 
 ---
 
@@ -208,17 +209,17 @@ Sliding window of 30 unique score onsets. For each window: `local_BPM = 114 × (
 
 All audio normalised to 22050 Hz mono. Leading silence trimmed where present (threshold: 1% of peak RMS). See `performers.json` for full metadata.
 
-| Pianist | Recording Type | Duration | Preprocessing |
-|---------|---------------|----------|--------------|
-| 郎朗 Lang Lang | Live stage | 127.4 s | Sample rate normalised |
-| 李云迪 Li Yundi | Studio | 187.2 s | — |
-| 沈文裕 Shen Wenyu | Home | 201.9 s | 7.4 s pre-music noise trimmed |
-| 殷承宗 Yin Chengzong | Live | 169.5 s | — |
-| Niemczuk | Studio | 215.8 s | 7.5 s leading silence trimmed |
-| HIEW Tzejia | Studio | 213.6 s | 3.4 s leading silence trimmed |
-| Jasmine Wong | Studio | 183.6 s | 1.4 s leading silence trimmed |
-| 陈洁 Chen Jie | Unknown | 179.2 s | — |
-| Live (Anon) | Live | 221.9 s | — |
+| Pianist | Type | Duration | Preprocessing | Source |
+|---------|------|----------|--------------|--------|
+| 郎朗 Lang Lang | Live stage | 127.4 s | Sample rate normalised | — |
+| 李云迪 Li Yundi | Studio | 187.2 s | — | — |
+| 沈文裕 Shen Wenyu | Home | 201.9 s | 7.4 s pre-music noise trimmed | — |
+| 殷承宗 Yin Chengzong | Live | 169.5 s | — | [youtu.be/fKhI9QYEk-Y](https://www.youtube.com/watch?v=fKhI9QYEk-Y) |
+| Niemczuk | Studio | 215.8 s | 7.5 s leading silence trimmed | [youtu.be/VjCCfLG7gDI](https://www.youtube.com/watch?v=VjCCfLG7gDI) |
+| HIEW Tzejia | Studio | 213.6 s | 3.4 s leading silence trimmed | [youtu.be/j-wshlxGqLU](https://www.youtube.com/watch?v=j-wshlxGqLU) |
+| Jasmine Wong | Studio | 183.6 s | 1.4 s leading silence trimmed | [youtu.be/66qcsOHoVFI](https://www.youtube.com/watch?v=66qcsOHoVFI) |
+| 陈洁 Chen Jie | Unknown | 179.2 s | — | [youtu.be/xOy3K_VYPKM](https://www.youtube.com/watch?v=xOy3K_VYPKM) |
+| Live (Anon) | Live | 221.9 s | — | [youtu.be/Cqb2RpsZ1PA](https://www.youtube.com/watch?v=Cqb2RpsZ1PA) |
 
 ---
 
