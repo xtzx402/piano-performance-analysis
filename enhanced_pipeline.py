@@ -330,10 +330,12 @@ print("OK")
 print("  Generating ANOVA significance plot...", end=" ")
 fig, ax = plt.subplots(figsize=(10, 6))
 p_values = [r['p_value'] for r in anova_results]
-p_log = [-np.log10(p + 1e-300) for p in p_values]
+p_log = [min(float(-np.log10(max(p, 1e-30))), 30) for p in p_values]
 colors = ['green' if p < 0.05 else 'gray' for p in p_values]
 ax.bar(range(13), p_log, color=colors, alpha=0.8, edgecolor='black')
 ax.axhline(-np.log10(0.05), color='red', linestyle='--', linewidth=2, label='α=0.05')
+ax.set_xticks(range(13))
+ax.set_xticklabels([f'MFCC {i}' for i in range(13)], rotation=45, ha='right')
 ax.set_xlabel('MFCC系数 / MFCC Coefficient')
 ax.set_ylabel('-log10(p值) / -log10(p-value)')
 ax.set_title('ANOVA：哪些MFCC系数显著不同？/ ANOVA: Which MFCC coefficients differ significantly?')

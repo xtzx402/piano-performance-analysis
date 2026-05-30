@@ -33,7 +33,7 @@ See `audio_normalization.py` for the normalization pipeline. Normalized audio fi
 ### Preprocessing Results
 | Pianist | Recording Type | Duration | Notes |
 |---------|---------------|----------|-------|
-| Lang Lang | Studio | 127.4s | — |
+| Lang Lang | Live stage performance | 127.4s | Starts immediately at first note |
 | Li Yundi | Studio | 187.2s | — |
 | Shen Wenyu | Home recording | 201.9s | 7.4s pre-music noise trimmed |
 
